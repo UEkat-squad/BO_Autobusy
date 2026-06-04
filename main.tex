@@ -1,0 +1,65 @@
+% Główny plik dokumentu – kompiluj właśnie ten plik
+
+\documentclass[a4paper,12pt,oneside,onecolumn]{book}
+% Ustawienia formatu dokumentu:
+% - a4paper: format A4
+% - 12pt: wielkość czcionki
+% - oneside: jednostronny druk
+% - onecolumn: jedna kolumna tekstu
+
+\linespread{1.5} % Zwiększenie interlinii (1.5x) dla lepszej czytelności
+\input{style.tex} % Dołączenie pliku z definicją stylu dokumentu
+
+% Dołączenie plików z bibliografią (literatura i netografia)
+\addbibresource{refs.bib}
+\addbibresource{url_refs.bib}
+
+
+\usepackage[titles]{tocloft}
+
+
+\begin{document}
+
+% *************** Front matter ***************
+\input{front.tex} % Tutaj znajduje się strona tytułowa, spis treści, oświadczenia itd.
+
+% *************** Treść rozdziałów *******-> 80-130 tys znakow
+
+% \chapter*{Wstęp}
+\addcontentsline{toc}{chapter}{Wstęp}
+\input{chapters/wstep}
+
+
+% *************** Bibliografia ***************
+% wymagania - Praca musi zawierać co najmniej 25 pozycji literaturowych, w tym 4 pozycje obcojęzyczne. Przypisy muszą być zgodne ze stylem APA. jako {nazwisko, rok, strona}
+\newpage
+\chapter*{Literatura} % Rozdział bez numeru
+\addcontentsline{toc}{chapter}{Literatura} % Dodanie do spisu treści
+
+\section*{Bibliografia}
+\setcounter{mybibcounter}{0} 
+\printbibliography[heading=none, notkeyword=netografia] % Wyświetla źródła nieoznaczone jako netografia
+
+\section*{Netografia}
+\setcounter{mybibcounter}{0} 
+\printbibliography[heading=none, keyword=netografia] % Wyświetla źródła oznaczone jako netografia
+
+
+% *************** Spisy pomocnicze ***************
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Spis rysunków}
+\listoffigures
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Spis tabel}
+\listoftables
+
+% Jeśli chcesz dodać spis kodów (próbek kodu) 
+\clearpage
+\phantomsection
+\addcontentsline{toc}{chapter}{Spis listingów}
+\lstlistoflistings
+
+\end{document}

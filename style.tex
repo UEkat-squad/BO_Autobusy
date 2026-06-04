@@ -1,0 +1,359 @@
+% Kodowanie i czcionka
+\usepackage[utf8]{inputenc}         % Kodowanie UTF-8
+\usepackage[T1]{fontenc}            % Lepsze dzielenie wyrazów i znaki diakrytyczne
+\usepackage{helvet}                 % Czcionka Helvetica
+\renewcommand{\familydefault}{\sfdefault} % Domyślna czcionka bezszeryfowa
+
+% Matematyka i symbole
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % Rozszerzenia matematyczne
+
+
+% Marginesy
+%\usepackage[margin=2.5cm]{geometry} % Ustawienie marginesów
+\usepackage[top=2.5cm, bottom=2.5cm, left=3.5cm, right=1.5cm]{geometry} % lewy i prawwy inaczej dla marginesow 
+
+
+% Ulepszenia typografii
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{enumitem} % opisy do wzorow
+% ODSTEPY ENUMERATE 1. 2. 3. 
+\setlist[enumerate]{itemsep=0pt, parsep=0pt, topsep=0pt}
+
+% Odnośniki i linki
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}   % Linki bez kolorów/ramki
+\urlstyle{same} % linki taka sama czcionka
+
+
+
+% --- FORMATOWANIE NAGŁÓWKÓW (Musi być dodane) ---
+\usepackage{titlesec}
+
+% Formatowanie ROZDZIAŁÓW (Nagłówek 1)
+% Wymogi: 16 pkt, pogrubiona, odstępy 18pkt przed i po
+\titleformat{\chapter}[block]
+  {\bfseries\fontsize{16}{16}\selectfont} % Styl: Pogrubienie, rozmiar 16pt
+  {\chaptername\ \thechapter.} % Numeracja: "Rozdział X."
+  {0.5em} % Odstęp między "Rozdział X." a tytułem
+  {}
+
+% Odstępy dla rozdziału: {lewy}{góra}{dół}
+\titlespacing*{\chapter}{0pt}{-20pt}{18pt}
+
+% Formatowanie ROZDZIAŁÓW nienumerowanych (Spisy, Literatura, Wstęp)
+\titleformat{name=\chapter,numberless}[block]
+  {\bfseries\fontsize{16}{16}\selectfont}
+  {}
+  {0pt}
+  {}
+\titlespacing*{name=\chapter,numberless}{0pt}{-20pt}{18pt}
+
+% Formatowanie PODROZDZIAŁÓW (Nagłówek 2 - np. 1.1)
+% Wymogi: 14 pkt, pogrubiona, odstępy 12pkt przed i po
+\titleformat{\section}[block]
+  {\bfseries\fontsize{14}{14}\selectfont}
+  {\thesection.}
+  {0.5em}
+  {}
+\titlespacing*{\section}{0pt}{12pt}{12pt}
+
+% Formatowanie PODPUNKTÓW (Nagłówek 3 - np. 1.1.1)
+% Wymogi: 12 pkt, pogrubiona, odstępy 6pkt przed i po
+\titleformat{\subsection}[block]
+  {\bfseries\fontsize{12}{12}\selectfont}
+  {\thesubsection.}
+  {0.5em}
+  {}
+\titlespacing*{\subsection}{0pt}{6pt}{6pt}
+
+
+
+% Wcięcia i bibliografia ************************************************************************************
+\usepackage{indentfirst}           % Wcięcie w pierwszym akapicie każdego rozdziału
+\setlength{\parindent}{1cm}
+
+% --- BIBLIOGRAFIA I CYTOWANIA (Poprawiona) ---
+\usepackage[polish]{babel}
+\usepackage{csquotes}
+\MakeOuterQuote{"}
+
+% Konfiguracja BibLaTeX - styl authoryear (APA-like)
+\usepackage[
+    style=authoryear,    % Styl: Autor (Rok)
+    backend=biber,       % Silnik przetwarzania
+    maxcitenames=2,      % W tekście: max 2 nazwiska, potem "i in." (zgodnie z APA)
+    maxbibnames=99,      % W bibliografii: wymień wszystkich autorów
+    uniquelist=false,    % Nie dodawaj inicjałów, jeśli nazwiska się powtarzają
+    isbn=false,          % WYŁĄCZ ISBN (zgodnie z szablonem)
+    doi=false,           % WYŁĄCZ DOI (zgodnie z szablonem)
+    url=false,           % WYŁĄCZ URL dla książek/artykułów
+    eprint=false
+]{biblatex}
+
+% Włączamy URL tylko dla typu @online (netografia)
+\AtEveryBibitem{%
+  \ifentrytype{online}{}{\clearfield{url}}%
+  \ifentrytype{online}{}{\clearfield{urldate}}%
+}
+
+% --- FORMATOWANIE WYGLĄDU bibliografi ---
+
+% 1. Wszystkie tytuły kursywą (książki, artykuły, strony www)
+\DeclareFieldFormat{title}{\mkbibemph{#1}}          
+\DeclareFieldFormat[article]{title}{\mkbibemph{#1}} 
+\DeclareFieldFormat[book]{title}{\mkbibemph{#1}}    
+\DeclareFieldFormat[online]{title}{\mkbibemph{#1}}    
+
+% 2. USUWANIE "W:" przed nazwą czasopisma
+% Standardowo biblatex daje "In:" lub "W:". Ta komenda to usuwa.
+\renewbibmacro{in:}{}
+
+% 3. Kolejność: Wydawnictwo, Miasto (Dla książek)
+% Standard to Miasto: Wydawnictwo. UE Katowice chce odwrotnie.
+\renewbibmacro*{publisher+location+date}{%
+  \printlist{publisher}%
+  \setunit*{\addcomma\space}%
+  \printlist{location}%
+  \setunit*{\addcomma\space}%
+  \usebibmacro{date}%
+  \newunit}
+
+% 4. Separatory
+\renewcommand*{\nameyeardelim}{\addcomma\space} % Przecinek po nazwisku w cytowaniu
+\renewcommand*{\postnotedelim}{\addcomma\space} % Przecinek przed numerem strony
+
+% 5. Data dostępu dla netografii: [dostęp DD.MM.RRRR]
+\DefineBibliographyStrings{polish}{
+  urlseen = {dostęp},
+}
+\DeclareFieldFormat{urldate}{\mkbibbrackets{\bibstring{urlseen}\space#1}}
+\DeclareFieldFormat{url}{\url{#1}}
+
+% 6. LISTA NUMEROWANA (1. 2. 3.) do bibliografi 
+\newcounter{mybibcounter}
+\defbibenvironment{bibliography}
+  {\list
+     {\stepcounter{mybibcounter}\themybibcounter.} 
+     {\setlength{\leftmargin}{2.5em}%              
+      \setlength{\labelwidth}{2em}%                
+      \setlength{\labelsep}{0.5em}%                
+      \setlength{\itemindent}{0pt}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}}
+  {\endlist}
+  {\item}
+
+
+
+
+
+% Kod źródłowy (np. programy)
+\usepackage{listings}
+
+% Nagłówki i stopki
+\usepackage{fancyhdr}
+\usepackage{etoolbox}
+
+% Grafika
+\usepackage{graphicx}
+\graphicspath{ {images/} }         % Folder z grafikami
+
+% Opisy pod rysunkami
+\usepackage{caption}
+\usepackage{chngcntr}
+
+% Globalne numerowanie rysunków i tabel
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+
+%definicja podpisu obrazka
+\DeclareCaptionFont{elevenpt}{\fontsize{11}{13.6}\selectfont} % Definicja 11pkt
+\captionsetup{
+  font=elevenpt, % Użycie 11pkt
+  labelfont=bf,
+  labelsep=period,
+  justification=raggedright, 
+  singlelinecheck=false
+}
+
+
+\usepackage{float}
+
+\newcommand{\MyFigure}[5][0.7\textwidth]{%
+  \begin{figure}[H] % H dla tego miejsca ht dla ustawienia roznie 
+    \centering
+    \includegraphics[width=#1]{#2}
+    \caption{#3}
+    \label{#4}
+    \vspace{-3pt}
+    {\raggedright\fontsize{10pt}{12pt}\selectfont\textit{Źródło: #5}\par}
+  \end{figure}
+}
+
+% Niestandardowe środowisko do tabel z podpisem i źródłem ---- TABELE
+\captionsetup[table]{
+    format=plain,
+    justification=raggedright,
+   labelfont=bf,
+   textfont=normalfont,
+   labelsep=period,
+   name=Tabela,
+   singlelinecheck=false,
+   skip=2pt
+}
+
+ \newcommand{\MyTableSource}[1]{%
+   \vspace{-8pt}
+   \begin{flushleft}
+     {\linespread{0.9}\fontsize{10}{12pt}\selectfont\parbox{0.95\textwidth}{\raggedright\textit{Źródło: #1}}}
+   \end{flushleft}
+   \vspace{-6pt}
+ }
+
+% Nadpisanie stylu rozdziału – aby używał fancyhdr
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+
+% Stylowanie kodu źródłowego
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.98,0.98,0.95} % Nieco jaśniejsze tło
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries, % Słowa kluczowe na niebiesko i pogrubione
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=10pt,                  % Większy odstęp numerów od kodu
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,                       % Standard dla Pythona to 4 spacje
+    frame=single,                    % Ramka wokół kodu
+    rulecolor=\color{black!10},      % Kolor ramki
+    extendedchars=true,              % Obsługa znaków specjalnych
+    literate={ą}{{\k{a}}}1 {ć}{{\'c}}1 {ę}{{\k{e}}}1 {ł}{{\l{}}}1 {ń}{{\'n}}1 {ó}{{\'o}}1 {ś}{{\'s}}1 {ź}{{\'z}}1 {ż}{{\.z}}1 {Ą}{{\k{A}}}1 {Ć}{{\'C}}1 {Ę}{{\k{E}}}1 {Ł}{{\L{}}}1 {Ń}{{\'N}}1 {Ó}{{\'O}}1 {Ś}{{\'S}}1 {Ź}{{\'Z}}1 {Ż}{{\.Z}}1 % Polskie znaki w komentarzach
+}
+
+% Definicja konkretnie pod Pythona
+\lstdefinestyle{pythonstyle}{
+    style=mystyle,
+    language=Python,
+    morekeywords={self, cls, @property, @staticmethod, yield}
+}
+
+\lstset{style=pythonstyle} % Ustawienie jako domyślny
+
+\lstdefinelanguage{javaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstdefinelanguage{css}{
+  morekeywords={accelerator,azimuth,background,background-attachment,
+    background-color,background-image,background-position,
+    background-position-x,background-position-y,background-repeat,
+    behavior,border,border-bottom,border-bottom-color,
+    border-bottom-style,border-bottom-width,border-collapse,
+    border-color,border-left,border-left-color,border-left-style,
+    border-left-width,border-right,border-right-color,
+    border-right-style,border-right-width,border-spacing,
+    border-style,border-top,border-top-color,border-top-style,
+    border-top-width,border-width,bottom,caption-side,clear,
+    clip,color,content,counter-increment,counter-reset,cue,
+    cue-after,cue-before,cursor,direction,display,elevation,
+    empty-cells,filter,float,font,font-family,font-size,
+    font-size-adjust,font-stretch,font-style,font-variant,
+    font-weight,height,ime-mode,include-source,
+    layer-background-color,layer-background-image,layout-flow,
+    layout-grid,layout-grid-char,layout-grid-char-spacing,
+    layout-grid-line,layout-grid-mode,layout-grid-type,left,
+    letter-spacing,line-break,line-height,list-style,
+    list-style-image,list-style-position,list-style-type,margin,
+    margin-bottom,margin-left,margin-right,margin-top,
+    marker-offset,marks,max-height,max-width,min-height,
+    min-width,-moz-binding,-moz-border-radius,
+    -moz-border-radius-topleft,-moz-border-radius-topright,
+    -moz-border-radius-bottomright,-moz-border-radius-bottomleft,
+    -moz-border-top-colors,-moz-border-right-colors,
+    -moz-border-bottom-colors,-moz-border-left-colors,-moz-opacity,
+    -moz-outline,-moz-outline-color,-moz-outline-style,
+    -moz-outline-width,-moz-user-focus,-moz-user-input,
+    -moz-user-modify,-moz-user-select,orphans,outline,
+    outline-color,outline-style,outline-width,overflow,
+    overflow-X,overflow-Y,padding,padding-bottom,padding-left,
+    padding-right,padding-top,page,page-break-after,
+    page-break-before,page-break-inside,pause,pause-after,
+    pause-before,pitch,pitch-range,play-during,position,quotes,
+    -replace,richness,right,ruby-align,ruby-overhang,
+    ruby-position,-set-link-source,size,speak,speak-header,
+    speak-numeral,speak-punctuation,speech-rate,stress,
+    scrollbar-arrow-color,scrollbar-base-color,
+    scrollbar-dark-shadow-color,scrollbar-face-color,
+    scrollbar-highlight-color,scrollbar-shadow-color,
+    scrollbar-3d-light-color,scrollbar-track-color,table-layout,
+    text-align,text-align-last,text-decoration,text-indent,
+    text-justify,text-overflow,text-shadow,text-transform,
+    text-autospace,text-kashida-space,text-underline-position,top,
+    unicode-bidi,-use-link-source,vertical-align,visibility,
+    voice-family,volume,white-space,widows,width,word-break,
+    word-spacing,word-wrap,writing-mode,z-index,zoom},
+  morestring=[s]{:}{;},
+  sensitive,
+  morecomment=[s]{/*}{*/}
+}
+
+% Spolszczenia nazw elementów
+\renewcommand{\lstlistingname}{Listing}
+\renewcommand{\lstlistlistingname}{Spis listingów}
+\renewcommand{\listfigurename}{Spis rysunków}
+\renewcommand{\listtablename}{Spis tabel}
+\renewcommand{\figurename}{Rysunek}
+\renewcommand{\tablename}{Tabela}
+\renewcommand{\chaptername}{Rozdział}
+\renewcommand{\contentsname}{Spis Treści}
+
+% Środowisko do warunków (np. w matematyce)
+\newenvironment{conditions}
+  {\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
+  {\end{tabular}\par\vspace{\belowdisplayskip}}
+
+
+
+% --- NOWE ŚRODOWISKO "GDZIE" (opis do wzorow) ---
+\newenvironment{gdzie}
+{
+    \vspace{-1.0em}    % Podciągnij tekst do góry (bliżej wzoru)
+    \noindent \textbf{gdzie:}  % Automatyczny napis "gdzie:"
+    \begin{itemize}[         % Lista z ciasnymi ustawieniami
+        noitemsep,           % Brak odstępów między punktami
+        topsep=2pt,  % Mały odstęp od "gdzie:" do pierwszego punktu
+        parsep=0pt,          % Brak odstępów wewnątrz punktów
+        partopsep=0pt,       % Brak dodatkowych odstępów
+        leftmargin=1.5em,    % Wcięcie listy
+        labelsep=0.5em     % Odstęp kropki/myślnika od tekstu
+    ]
+}
+{
+    \end{itemize}
+    \vspace{0.5em}                  % Odstęp po zakończeniu opisu
+}
