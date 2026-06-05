@@ -181,14 +181,13 @@
 
 \usepackage{float}
 
-\newcommand{\MyFigure}[5][0.7\textwidth]{%
+\newcommand{\MyFigure}[4][0.7\textwidth]{%
   \begin{figure}[H] % H dla tego miejsca ht dla ustawienia roznie 
     \centering
     \includegraphics[width=#1]{#2}
     \caption{#3}
     \label{#4}
     \vspace{-3pt}
-    {\raggedright\fontsize{10pt}{12pt}\selectfont\textit{Źródło: #5}\par}
   \end{figure}
 }
 
