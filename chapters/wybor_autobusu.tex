@@ -17,6 +17,68 @@ Wychodząc naprzeciw specyficznym potrzebom nowo projektowanego układu komunika
 
 Aby zapewnić miarodajność, analizę rozdzielono na dwie niezależne kategorie rynkowe: autobusy duże (przegubowe i wielkopojemne) oraz autobusy średnie (pojazdy klasy MIDI).
 
+\section{Modelowanie problemu decyzyjnego}
+
+Z matematycznego punktu widzenia wybór optymalnego taboru autobusowego stanowi wielokryterialny problem decyzyjny (MCDM -- \textit{Multi-Criteria Decision Making}). W celu przeprowadzenia formalnej analizy za pomocą metody SAW, problem ujęto w postaci modelu optymalizacyjnego. 
+
+Niech zbiór dostępnych wariantów (modeli autobusów) będzie oznaczony jako zbiór $A=\{A_1,A_2,\dots,A_m\}$, gdzie indeks $i\in\{1,\dots,m\}$. Każdy wariant oceniany jest na podstawie zbioru pięciu kryteriów decyzyjnych, indeksowanych jako $j\in\{1,\dots,5\}$. 
+
+Parametry wejściowe modelu zdefiniowano następująco:
+\begin{itemize}
+    \item $x_{ij}$ -- deterministyczna wartość $j$-tego kryterium dla $i$-tego modelu autobusu,
+    \item $w_j$ -- waga przypisana $j$-temu kryterium, odzwierciedlająca jego istotność dla systemu komunikacyjnego Sławkowa.
+\end{itemize}
+
+\subsubsection*{Krok normalizacji}
+Ponieważ poszczególne kryteria wyrażone są w różnych jednostkach (konie mechaniczne, sztuki, punkty, miliony złotych), konieczne jest ich sprowadzenie do ujednoliconej, bezwymiarowej postaci. Transformacja ta polega na wyznaczeniu znormalizowanych wartości $r_{ij}$.
+
+Dla kryteriów będących stymulantami (K1, K2, K3, K4), w których wyższa wartość jest pożądana, zastosowano formułę:
+\begin{equation}
+r_{ij} = \frac{x_{ij}}{\max_i x_{ij}}
+\end{equation}
+
+Dla kryterium będącego destymulantą (K5), gdzie niższa wartość jest preferowana, zastosowano odwróconą formułę proporcjonalności:
+\begin{equation}
+r_{ij} = \frac{\min_i x_{ij}}{x_{ij}}
+\end{equation}
+
+\subsubsection*{Funkcja celu}
+Celem metody SAW jest maksymalizacja globalnego wskaźnika użyteczności dla każdego z rozpatrywanych wariantów. Wartość syntetyczna $S_i$ dla każdego modelu autobusu stanowi sumę iloczynów znormalizowanych ocen oraz odpowiednich wag. Globalna funkcja celu dąży do wyłonienia takiego wariantu $A^*$, który maksymalizuje ten wynik:
+\begin{equation}
+\max S_i = \sum_{j=1}^{5} w_j \cdot r_{ij}
+\end{equation}
+
+Aby zapisać problem w ujęciu klasycznych badań operacyjnych, wprowadzamy binarną zmienną decyzyjną $y_i$, która przyjmuje wartość 1, jeśli $i$-ty autobus zostanie wybrany do obsługi linii, oraz 0 w przeciwnym razie. Ostateczna funkcja celu modelu przyjmuje postać:
+\begin{equation}
+\max Z = \sum_{i=1}^{m} (S_i \cdot y_i)
+\end{equation}
+
+\subsubsection*{Ograniczenia brzegowe modelu}
+Rozwiązanie modelu podlega następującym ograniczeniom analitycznym:
+
+\begin{enumerate}
+    \item Warunek normalizacji wag kryteriów:
+    \begin{equation}
+    \sum_{j=1}^{5} w_j = 1
+    \end{equation}
+    \item Warunek nieujemności wag:
+    \begin{equation}
+    w_j \ge 0 \quad \text{dla } j=1,\dots,5
+    \end{equation}
+    \item Przedział wartości znormalizowanych ocen (zakładając dodatnie wartości wejściowe):
+    \begin{equation}
+    0 < r_{ij} \le 1
+    \end{equation}
+    \item Warunek jednokrotnego wyboru (dla danej klasy pojazdów wybieramy jeden zwycięski model):
+    \begin{equation}
+    \sum_{i=1}^{m} y_i = 1
+    \end{equation}
+    \item Binarność zmiennej decyzyjnej:
+    \begin{equation}
+    y_i \in \{0, 1\}
+    \end{equation}
+\end{enumerate}
+
 \section{Ocena prestiżu autobusów}\label{sec:bus_prestige}
 
 Jednym z kluczowych kryteriów przyjętych w analizie decyzyjnej jest prestiż pojazdu. Wartość tego parametru wyznaczono jako średnią arytmetyczną z ocen eksperckich zespołu projektowego. Składowe oceny obejmowały analizę designu zewnętrznego, aranżacji wnętrza, a także identyfikację niestandardowych udogodnień i nowatorskich rozwiązań konstrukcyjnych.
@@ -82,62 +144,63 @@ Model ten uzyskał od zespołu decyzyjnego stosunkowo niską ocenę na poziomie 
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY9LE/zewnatrz.png}{Zewnętrze autobusu SANCITY 9LE}{fig:SANCITY9LEzewnatrz}
 
 \subsection{SANCITY 10LF}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Autobus otrzymał 6 punktów, ponieważ w ocenie decydentów prezentuje się jako poprawny, ale bardzo przeciętny pojazd miejski. Zarówno stylistyka nadwozia, jak i wykończenie wnętrza opierają się na standardowych, niczym niewyróżniających się rozwiązaniach projektowych. Jedynym elementem, który wpłynął na nieznaczne podwyższenie noty u jednego z decydentów, były lokalne akcenty w postaci polskich flag umieszczonych przy kabinie kierującego. Ten drobny detal został doceniony jako miły dodatek ocieplający wizualnie przestrzeń zdominowaną przez utylitarne materiały.
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY10LF/wnetrze.png}{Wnętrze autobusu SANCITY 10LF}{fig:SANCITY10LFwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY10LF/zewnatrz.png}{Zewnętrze autobusu SANCITY 10LF}{fig:SANCITY10LFzewnatrz}
 
 \subsection{SANCITY 10LFE}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten powiela konwencjonalne i zachowawcze rozwiązania projektowe znane z poprzednio ocenianej wersji. W opinii zespołu decyzyjnego pojazd nie wyróżnia się na tle konkurencji niczym szczególnym, a jego wnętrze i nadwozie są do bólu standardowe. Na obniżenie ostatecznej punktacji w tym przypadku wpłynęła bezpośrednio kolorystyka pojazdu. Decydenci bardzo chłodno przyjęli zielony kolor nadwozia, uznając ten wybór estetyczny za wyjątkowo nietrafiony i mało elegancki.
 \MyFigure[0.4\textwidth]{images/autobusy/SANCITY10LFE/wnetrze.png}{Wnętrze autobusu SANCITY 10LFE}{fig:SANCITY10LFEwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY10LFE/zewnatrz.png}{Zewnętrze autobusu SANCITY 10LFE}{fig:SANCITY10LFEzewnatrz}
 
 \subsection{SANCITY 12LF}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Pojazd otrzymał zaledwie 4 punkty, co stanowi odzwierciedlenie mocno przestarzałego podejścia do jego projektowania. Bryła nadwozia, konsekwentnie powielająca standardy znane z poprzednich wariantów producenta, została uznana za mało atrakcyjną i pozbawioną nowoczesnego charakteru. Wewnątrz autobusu na pierwszy plan wysuwa się archaiczna architektura miejsc siedzących. Zespół decyzyjny stwierdził, że fotele pasażerskie swoim profilem i estetyką bardziej przypominają siedzenia ze starszych generacji pociągów podmiejskich niż ergonomiczne rozwiązania dedykowane współczesnym autobusom, co bezpośrednio przełożyło się na negatywną ocenę.
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY12LF/wnetrze.png}{Wnętrze autobusu SANCITY 12LF}{fig:SANCITY12LFwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY12LF/zewnatrz.png}{Zewnętrze autobusu SANCITY 12LF}{fig:SANCITY12LFzewnatrz}
 
 \subsection{SANCITY 12LFH}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model otrzymał wysoką ocenę 8 punktów. Zespół decyzyjny docenił nowoczesny, modernistyczny wygląd zewnętrzny pojazdu oraz świetnie zaplanowaną przestrzeń pasażerską. Wnętrze zaprojektowano w sposób niezwykle optymalny, zapewniając dużo miejsc do siedzenia bez utraty odczuwalnej przestronności. Ciekawostką, która zdecydowanie podniosła ostateczny wynik w kategorii prestiżu, była ranga reprezentacyjna autobusu - na jego pokładzie gościł Prezydent RP Andrzej Duda. Decydenci zgodnie uznali, że taki element historii pojazdu nadaje mu unikalny, prestiżowy charakter.
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY12LFH/wnetrze.png}{Wnętrze autobusu SANCITY 12LFH}{fig:SANCITY12LFHwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/SANCITY12LFH/zewnatrz.png}{Zewnętrze autobusu SANCITY 12LFH}{fig:SANCITY12LFHzewnatrz}
+\MyFigure[0.5\textwidth]{images/autobusy/SANCITY12LFH/prezydent.jpg}{Wizyta prezydenta w autobusie SANCITY 12 LFH}{fig:SANCITY12LFHprezydent}
 
 \subsection{Urbino 8,9 LE}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Autobus ten uzyskał satysfakcjonującą notę w wysokości 7 punktów. Ocenie zespołu decyzyjnego przewodziły dwa kluczowe aspekty wnętrza. Po pierwsze, bardzo pozytywnie odebrano obecność dwóch monitorów informacyjnych, co stanowi duży krok w stronę nowoczesnej obsługi pasażera. Po drugie, doceniono samą aranżację siedzeń. Przemyślany układ foteli sprawia, że przestrzeń jest wysoce ergonomiczna i przyjazna dla podróżujących.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LE/wnetrze.png}{Wnętrze autobusu Urbino 8,9 LE}{fig:Urbino89LEwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LE/zewnatrz.png}{Zewnętrze autobusu Urbino 8,9 LE}{fig:Urbino89LEzewnatrz}
 
 \subsection{Urbino 8,9 LE electric}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał notę w wysokości 8 punktów. Zespół decyzyjny docenił przede wszystkim wyraźnie smuklejszą i bardziej nowoczesną linię nadwozia, która nadaje pojazdowi lekki i dynamiczny charakter. Kluczowym atutem wnętrza okazało się znaczne podwyższenie w tylnej sekcji pasażerskiej. Takie rozwiązanie architektoniczne nie tylko poszerza pole widzenia podróżnych, ale również gwarantuje im wyższy standard przejazdu, potęgując ogólne poczucie prestiżu i ekskluzywności. Pewnym mankamentem, który nieznacznie obniżył notę za estetykę, był dobór materiałów wykończeniowych - zastosowana na podłodze tekstura imitująca domowe panele drewniane została uznana za element niezbyt harmonizujący z wysoce nowoczesnym duchem pojazdu.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LEelectric/wnetrze.png}{Wnętrze autobusu Urbino 8,9 LE electric}{fig:Urbino89LEelectricwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LEelectric/zewnatrz.png}{Zewnętrze autobusu Urbino 8,9 LE electric}{fig:Urbino89LEelectriczewnatrz}
 
 \subsection{Urbino 10,5 electric}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał od zespołu decyzyjnego bardzo niską notę w wysokości 4 punktów. O ile bryła zewnętrzna pojazdu jest poprawna estetycznie i nie budzi większych zastrzeżeń, o tyle aranżacja wnętrza spotkała się z surową krytyką. Zdecydowanie najsłabszym punktem projektu okazał się niezwykle niefortunny dobór materiałów wykończeniowych. Zastosowanie mocno rzucającej się w oczy wykładziny o strukturze domowych paneli drewnianych uznano za rażący błąd estetyczny, który drastycznie obniża profesjonalny wizerunek autobusu. Ponadto, monotonny design foteli oraz wysoce surowy charakter tylnej, podwyższonej strefy sprawiają, że wnętrze jest całkowicie pozbawione wyrazu. Zamiast budować pożądane poczucie ekskluzywności i prestiżu, amfiteatralny podest w tylnej sekcji prezentuje się nadmiernie pospolicie.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino10,5electric/wnetrze.png}{Wnętrze autobusu Urbino 10,5 electric}{fig:Urbino105electricwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino10,5electric/zewnatrz.jpg}{Zewnętrze autobusu Urbino 10,5 electric}{fig:Urbino105electriczewnatrz}
 
 \subsection{Urbino 12}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał bardzo wysoką notę na poziomie 9 punktów. Zespół decyzyjny docenił przede wszystkim klasyczną, lecz wysoce elegancką linię nadwozia, która w połączeniu ze sprawdzonym i dobrze znanym układem wnętrza tworzy spójną, prestiżową całość. Kluczowym argumentem przemawiającym za tak wysoką oceną okazały się detale z zakresu ergonomii przestrzeni pasażerskiej. Na szczególne uznanie zasługuje rezygnacja z przeszklonej osłony w tylnej sekcji pojazdu, przy ostatnim rzędzie siedzeń. Eliminacja tego panelu - często spotykanego w konkurencyjnych modelach – znacząco powiększa dostępną przestrzeń na nogi. Przekłada się to bezpośrednio na wyższy komfort podróżujących tam osób, skutecznie zapobiegając uciążliwemu poczuciu ciasnoty.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino12/wnetrze.png}{Wnętrze autobusu Urbino 12}{fig:Urbino12wnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino12/zewnatrz.jpg}{Zewnętrze autobusu Urbino 12}{fig:Urbino12zewnatrz}
 
 \subsection{Urbino 12 CNG}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Pojazd ten uzyskał notę w wysokości 5 punktów ze względu na swój wysoce konwencjonalny charakter. Zespół decyzyjny uznał, że model nie wyróżnia się niczym szczególnym ani pod względem designu zewnętrznego, ani aranżacji wnętrza. O niższej ocenie zadecydowały także istotne braki w doposażeniu z zakresu nowoczesnych technologii. Zauważono przede wszystkim brak wizualnego systemu informacji pasażerskiej w postaci monitorów, co odczuwalnie obniża standard pojazdu i wpływa na gorszy odbiór przestrzeni przez podróżnych.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino12CNG/wnetrze.png}{Wnętrze autobusu Urbino 12 CNG}{fig:Urbino12CNGwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino12CNG/zewnatrz.png}{Zewnętrze autobusu Urbino 12 CNG}{fig:Urbino12CNGzewnatrz}
 
 \subsection{Urbino 15 LE electric}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał solidną notę na poziomie 7 punktów. O ile bryła zewnętrzna pojazdu ma charakter zachowawczy i opiera się na konwencjonalnych rozwiązaniach, o tyle projekt przestrzeni pasażerskiej stanowi jego ogromny atut. Zespół decyzyjny docenił wysoce ergonomiczne, anatomicznie profilowane fotele, które doposażono w składane podłokietniki. Element ten nie tylko znacząco podnosi komfort podróży, ale również poprawia stabilizację pasażerów podczas jazdy. Standard użyteczności podnosi także obecność dedykowanych obszarów na bagaż podręczny. Dopełnieniem całości jest podwyższenie w tylnej sekcji pokładu, które skutecznie kreuje poczucie ekskluzywności i prestiżu, nadając wnętrzu wyższy standard.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino15LEelectric/wnetrze.jpg}{Wnętrze autobusu Urbino 15 LE electric}{fig:Urbino15LEelectricwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino15LEelectric/zewnatrz.png}{Zewnętrze autobusu Urbino 15 LE electric}{fig:Urbino15LEelectriczewnatrz}
 
 \subsection{Urbino 18}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał przeciętną ocenę na poziomie 6 punktów. W opinii zespołu decyzyjnego pojazd ten prezentuje się bardzo konwencjonalnie, nie oferując żadnych ponadstandardowych czy innowacyjnych rozwiązań wizualnych. Zarówno zewnętrzna linia nadwozia, jak i ogólna aranżacja przestrzeni pasażerskiej opierają się na sprawdzonych, lecz mocno zachowawczych schematach, co nie pozwala na zbudowanie poczucia wyższego prestiżu. Mimo tego standardowego charakteru, odnotowano dwa istotne udogodnienia podnoszące użyteczność wnętrza. Na korzyść modelu przemawia wyposażenie pokładu w multimedialny monitor oraz zastosowanie podłokietników przy fotelach, co bezpośrednio poprawia ergonomię i komfort podróżnych.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino18/wnetrze.png}{Wnętrze autobusu Urbino 18}{fig:Urbino18wnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino18/zewnatrz.jpg}{Zewnętrze autobusu Urbino 18}{fig:Urbino18zewnatrz}
 
 \subsection{Urbino 18 CNG}
-Miejsce na opis i uzasadnienie oceny prestiżu dla tego modelu...
+Model ten uzyskał maksymalną notę w wysokości 10 punktów, stając się jednym z liderów w kategorii prestiżu. Głównym atutem, który zadecydował o tak wysokiej ocenie, jest bezkompromisowa i niezwykle komfortowa aranżacja przestrzeni pasażerskiej. Zastosowany układ foteli nawiązuje bezpośrednio do standardów znanych z autokarów turystycznych, co diametralnie zmienia percepcję typowej komunikacji miejskiej i radykalnie podnosi odczuwalny komfort podróży. Wysoki standard użyteczności potwierdza również wyposażenie miejsc w ergonomiczne podłokietniki. Dopełnieniem tego niezwykle udanego projektu jest podwyższenie w tylnej części pokładu. Rozwiązanie to gwarantuje pasażerom poszerzone pole widzenia, co bezpośrednio przekłada się na poczucie ekskluzywności i wyjątkowo pozytywne wrażenia z jazdy.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino18CNG/wnetrze.png}{Wnętrze autobusu Urbino 18 CNG}{fig:Urbino18CNGwnetrze}
 \MyFigure[0.7\textwidth]{images/autobusy/Urbino18CNG/zewnatrz.png}{Zewnętrze autobusu Urbino 18 CNG}{fig:Urbino18CNGzewnatrz}
 
@@ -194,7 +257,7 @@ Do tej kategorii zakwalifikowano pojazdy o wysokiej zdolności przewozowej, prze
     \end{adjustbox}
 \end{table}
 
-Skupienie wagi na prestiżu i ergonomii pasażerskiej doprowadziło do zwycięstwa pojazdu z napędem gazowym -- \textit{Solaris Urbino 18 CNG}. Zgromadził on doskonałe noty za estetykę i oferowane rozwiązania (prestiż uśredniony na 10,00) oraz dużą pojemność. Bezpośrednio za nim znalazł się najpotężniejszy (408 KM) elektryczny \textit{Urbino 15 LE}.
+Skupienie wagi na prestiżu i ergonomii pasażerskiej doprowadziło do zwycięstwa pojazdu z napędem gazowym -- \textit{Solaris Urbino 18 CNG}. Zgromadził on doskonałe noty za estetykę i oferowane rozwiązania (prestiż uśredniony na 10,00) oraz dużą pojemność. Bezpośrednio za nim znalazł się najpotężniejszy (408 KM) elektryczny \textit{Urbino 15 LE}. Tym samym, zgodnie z przyjętym modelem optymalizacyjnym, wariant ten stanowi rozwiązanie optymalne ($y_i = 1$ dla Urbino 18 CNG).
 
 \section{Analiza SAW dla autobusów średnich}
 
@@ -245,4 +308,4 @@ Zestawienie pojazdów o długości do kilkunastu metrów, które idealnie wpisuj
     \end{adjustbox}
 \end{table}
 
-W tym segmencie dominację pokazała marka Iveco za sprawą modelu \textit{Crossway Pro 10,8}. Oferuje on absolutnie bezkonkurencyjną moc silnika w swojej klasie gabarytowej (360 KM) połączoną z maksymalizacją wykorzystania wnętrza pojazdu (najwyższa ocena w parametrze "Miejsca"). Świetnie wyważony pod kątem prestiżu w stosunku do mocy okazał się też \textit{Mercedes-Benz Citaro K}, zyskując najwyższą notę za udogodnienia dla niepełnosprawnych.
+W tym segmencie dominację pokazała marka Iveco za sprawą modelu \textit{Crossway Pro 10,8}. Oferuje on absolutnie bezkonkurencyjną moc silnika w swojej klasie gabarytowej (360 KM) połączoną z maksymalizacją wykorzystania wnętrza pojazdu (najwyższa ocena w parametrze "Miejsca"). Świetnie wyważony pod kątem prestiżu w stosunku do mocy okazał się też \textit{Mercedes-Benz Citaro K}, zyskując najwyższą notę za udogodnienia dla niepełnosprawnych. Zgodnie z funkcją celu, wariant ten stanowi rozwiązanie optymalne dla tej klasy gabarytowej ($y_i = 1$ dla Crossway Pro 10,8).
