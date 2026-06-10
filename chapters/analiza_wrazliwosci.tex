@@ -1,0 +1,189 @@
+\chapter{Analiza wrażliwości}
+
+Analiza wrażliwości pozwala ocenić, w jakim stopniu zmiana struktury wag kryteriów wpływa na końcowy ranking autobusów wyznaczony metodą SAW. Dla każdej kategorii pojazdów zdefiniowano trzy scenariusze preferencji decydenta: \textbf{scenariusz oszczędny} (dominująca waga kosztu zakupu), \textbf{scenariusz techniczny} (dominujące wagi mocy silnika i liczby miejsc) oraz \textbf{scenariusz neutralny} (równe wagi wszystkich kryteriów). Zestawienie wyników umożliwia identyfikację alternatyw stabilnych rankingowo oraz tych, których pozycja silnie zależy od przyjętych preferencji.
+
+
+\section{Duże autobusy}
+
+W segmencie dużych autobusów przeanalizowano wpływ trzech układów wag na wyniki modelu SAW. Poszczególne scenariusze różnią się zasadniczym przesunięciem punktu ciężkości oceny -- od priorytetu ekonomicznego po preferencje techniczne.
+
+\begin{table}[H]
+    \centering
+    \caption{Scenariusze wag -- autobusy duże}
+    \vspace{0.2cm}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \textbf{Scenariusz} & \textbf{K1: Moc} & \textbf{K2: Miejsca} & \textbf{K3: Prestiż} & \textbf{K4: Udogod.} & \textbf{K5: Koszt} \\ \hline
+        Oszczędny  & 0.14 & 0.14 & 0.14 & 0.08 & 0.50 \\ \hline
+        Techniczny & 0.35 & 0.35 & 0.10 & 0.15 & 0.05 \\ \hline
+        Neutralny  & 0.20 & 0.20 & 0.20 & 0.20 & 0.20 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy duże (scenariusz oszczędny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Urbino 12              & 0.088 & 0.034 & 0.121 & 0.060 & 0.500 & \textbf{0.804} \\ \hline
+        2 & SANCITY 12LF           & 0.095 & 0.086 & 0.056 & 0.060 & 0.500 & \textbf{0.797} \\ \hline
+        3 & Urbino 12 CNG          & 0.110 & 0.086 & 0.065 & 0.060 & 0.455 & \textbf{0.776} \\ \hline
+        4 & CapaCity L             & 0.124 & 0.095 & 0.121 & 0.080 & 0.250 & \textbf{0.670} \\ \hline
+        5 & MAN Lion's Intercity LE 14 & 0.091 & 0.136 & 0.089 & 0.060 & 0.278 & \textbf{0.653} \\ \hline
+        6 & Urbino 18              & 0.106 & 0.116 & 0.089 & 0.060 & 0.278 & \textbf{0.649} \\ \hline
+        7 & Urbino 15 LE electric  & 0.140 & 0.140 & 0.098 & 0.040 & 0.227 & \textbf{0.645} \\ \hline
+        8 & Urbino 18 CNG          & 0.110 & 0.118 & 0.140 & 0.060 & 0.208 & \textbf{0.637} \\ \hline
+        9 & MAN Lion's City 12 E   & 0.112 & 0.095 & 0.089 & 0.080 & 0.192 & \textbf{0.568} \\ \hline
+        10 & Nesobus 12            & 0.117 & 0.080 & 0.135 & 0.060 & 0.172 & \textbf{0.564} \\ \hline
+        11 & MAN Lion's City 12 G  & 0.096 & 0.080 & 0.042 & 0.080 & 0.250 & \textbf{0.548} \\ \hline
+        12 & SANCITY 12LFH         & 0.118 & 0.086 & 0.112 & 0.060 & 0.154 & \textbf{0.530} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy duże (scenariusz techniczny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Urbino 15 LE electric      & 0.350 & 0.350 & 0.070 & 0.075 & 0.023 & \textbf{0.868} \\ \hline
+        2 & CapaCity L                 & 0.309 & 0.237 & 0.087 & 0.150 & 0.025 & \textbf{0.807} \\ \hline
+        3 & Urbino 18 CNG              & 0.275 & 0.296 & 0.100 & 0.113 & 0.021 & \textbf{0.804} \\ \hline
+        4 & MAN Lion's Intercity LE 14 & 0.227 & 0.339 & 0.063 & 0.113 & 0.028 & \textbf{0.770} \\ \hline
+        5 & Urbino 18                  & 0.266 & 0.291 & 0.063 & 0.113 & 0.028 & \textbf{0.760} \\ \hline
+        6 & MAN Lion's City 12 E       & 0.280 & 0.237 & 0.063 & 0.150 & 0.019 & \textbf{0.749} \\ \hline
+        7 & SANCITY 12LFH              & 0.295 & 0.215 & 0.080 & 0.113 & 0.015 & \textbf{0.718} \\ \hline
+        8 & Nesobus 12                 & 0.292 & 0.199 & 0.097 & 0.113 & 0.017 & \textbf{0.717} \\ \hline
+        9 & Urbino 12 CNG              & 0.275 & 0.215 & 0.047 & 0.113 & 0.045 & \textbf{0.695} \\ \hline
+        10 & SANCITY 12LF              & 0.238 & 0.215 & 0.040 & 0.113 & 0.050 & \textbf{0.656} \\ \hline
+        11 & MAN Lion's City 12 G      & 0.240 & 0.199 & 0.030 & 0.150 & 0.025 & \textbf{0.644} \\ \hline
+        12 & Urbino 12                 & 0.220 & 0.086 & 0.087 & 0.113 & 0.050 & \textbf{0.555} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy duże (scenariusz neutralny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & CapaCity L                 & 0.176 & 0.135 & 0.173 & 0.200 & 0.100 & \textbf{0.785} \\ \hline
+        2 & Urbino 18 CNG              & 0.157 & 0.169 & 0.200 & 0.150 & 0.083 & \textbf{0.759} \\ \hline
+        3 & Urbino 15 LE electric      & 0.200 & 0.200 & 0.140 & 0.100 & 0.091 & \textbf{0.731} \\ \hline
+        4 & MAN Lion's Intercity LE 14 & 0.130 & 0.194 & 0.127 & 0.150 & 0.111 & \textbf{0.712} \\ \hline
+        5 & Urbino 18                  & 0.152 & 0.166 & 0.127 & 0.150 & 0.111 & \textbf{0.706} \\ \hline
+        6 & Urbino 12 CNG              & 0.157 & 0.123 & 0.093 & 0.150 & 0.182 & \textbf{0.705} \\ \hline
+        7 & MAN Lion's City 12 E       & 0.160 & 0.135 & 0.127 & 0.200 & 0.077 & \textbf{0.699} \\ \hline
+        8 & Urbino 12                  & 0.125 & 0.049 & 0.173 & 0.150 & 0.200 & \textbf{0.698} \\ \hline
+        9 & Nesobus 12                 & 0.167 & 0.114 & 0.193 & 0.150 & 0.069 & \textbf{0.693} \\ \hline
+        10 & SANCITY 12LF              & 0.136 & 0.123 & 0.080 & 0.150 & 0.200 & \textbf{0.689} \\ \hline
+        11 & SANCITY 12LFH             & 0.169 & 0.123 & 0.160 & 0.150 & 0.062 & \textbf{0.663} \\ \hline
+        12 & MAN Lion's City 12 G      & 0.137 & 0.114 & 0.060 & 0.200 & 0.100 & \textbf{0.611} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+W \textbf{scenariuszu oszczędnym} (waga kosztu zakupu wynosi 0,50) zdecydowanie dominują najtańsze pojazdy -- \textit{Urbino 12} oraz \textit{SANCITY 12LF} (po 1,00 mln zł). W podstawowym modelu SAW zajmowały one odległe pozycje. Zwycięzca scenariusza bazowego, \textit{Urbino 18 CNG}, spada na siódme miejsce. Pokazuje to wyraźnie, że jego wysoka nota wynikała głównie z walorów jakościowych, a nie ekonomicznych.
+
+W \textbf{scenariuszu technicznym} (łączna waga mocy i liczby miejsc wynosi 0,70) prym wiedzie \textit{Urbino 15 LE electric} z wynikiem 0,868. Pojazd ten dysponuje najpotężniejszym silnikiem (408 KM) i największą liczbą miejsc (65) spośród wszystkich rozpatrywanych modeli. Drugą lokatę zajmuje \textit{CapaCity L}, trzecią -- \textit{Urbino 18 CNG}. Zestawienie to nie odbiega znacząco od rankingu bazowego.
+
+W \textbf{scenariuszu neutralnym} (wszystkie wagi równe 0,20) najlepiej wypadają autobusy o zrównoważonych parametrach. Zwycięża \textit{CapaCity L}, który łączy wysokie oceny za moc, udogodnienia dla niepełnosprawnych oraz prestiż. Warto dodać, że \textit{MAN Lion's City 12 G} zajmuje ostatnie miejsce we wszystkich trzech scenariuszach -- świadczy to o jego słabej konkurencyjności niezależnie od przyjętych preferencji. Natomiast \textit{CapaCity L} regularnie plasuje się w pierwszej trójce (poza scenariuszem oszczędnym), co potwierdza jego ogólną atrakcyjność.
+
+
+\section{Średnie autobusy}
+
+Analogiczną procedurę przeprowadzono dla segmentu autobusów średnich, stosując takie same trzy zestawy wag.
+
+\begin{table}[H]
+    \centering
+    \caption{Scenariusze wag -- autobusy średnie}
+    \vspace{0.2cm}
+    \begin{tabular}{|l|c|c|c|c|c|}
+        \hline
+        \textbf{Scenariusz} & \textbf{K1: Moc} & \textbf{K2: Miejsca} & \textbf{K3: Prestiż} & \textbf{K4: Udogod.} & \textbf{K5: Koszt} \\ \hline
+        Oszczędny  & 0.14 & 0.14 & 0.14 & 0.08 & 0.50 \\ \hline
+        Techniczny & 0.35 & 0.35 & 0.10 & 0.15 & 0.05 \\ \hline
+        Neutralny  & 0.20 & 0.20 & 0.20 & 0.20 & 0.20 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy średnie (scenariusz oszczędny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Crossway Pro 10,8      & 0.140 & 0.140 & 0.102 & 0.048 & 0.333 & \textbf{0.764} \\ \hline
+        2 & SANCITY 9LE            & 0.082 & 0.048 & 0.070 & 0.064 & 0.500 & \textbf{0.763} \\ \hline
+        3 & Crossway 10.8LE        & 0.128 & 0.086 & 0.140 & 0.064 & 0.273 & \textbf{0.691} \\ \hline
+        4 & Citaro K               & 0.116 & 0.095 & 0.135 & 0.080 & 0.231 & \textbf{0.657} \\ \hline
+        5 & SANCITY 10LF           & 0.096 & 0.077 & 0.092 & 0.048 & 0.333 & \textbf{0.646} \\ \hline
+        6 & Urbino 8,9 LE          & 0.097 & 0.098 & 0.108 & 0.064 & 0.273 & \textbf{0.640} \\ \hline
+        7 & SANCITY 10LFE          & 0.132 & 0.071 & 0.081 & 0.064 & 0.136 & \textbf{0.485} \\ \hline
+        8 & MAN Lion's City 10 E   & 0.127 & 0.107 & 0.081 & 0.064 & 0.115 & \textbf{0.494} \\ \hline
+        9 & Urbino 8,9 LE electric & 0.085 & 0.080 & 0.129 & 0.064 & 0.125 & \textbf{0.483} \\ \hline
+        10 & Urbino 10,5 electric  & 0.132 & 0.098 & 0.065 & 0.048 & 0.115 & \textbf{0.459} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy średnie (scenariusz techniczny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Crossway Pro 10,8      & 0.350 & 0.350 & 0.073 & 0.090 & 0.033 & \textbf{0.896} \\ \hline
+        2 & Citaro K               & 0.291 & 0.238 & 0.096 & 0.150 & 0.023 & \textbf{0.798} \\ \hline
+        3 & Crossway 10.8LE        & 0.321 & 0.216 & 0.100 & 0.120 & 0.027 & \textbf{0.784} \\ \hline
+        4 & MAN Lion's City 10 E   & 0.317 & 0.268 & 0.058 & 0.120 & 0.012 & \textbf{0.774} \\ \hline
+        5 & Urbino 10,5 electric   & 0.331 & 0.246 & 0.046 & 0.090 & 0.012 & \textbf{0.724} \\ \hline
+        6 & Urbino 8,9 LE          & 0.243 & 0.246 & 0.077 & 0.120 & 0.027 & \textbf{0.713} \\ \hline
+        7 & SANCITY 10LFE          & 0.331 & 0.179 & 0.058 & 0.120 & 0.014 & \textbf{0.701} \\ \hline
+        8 & Urbino 8,9 LE electric & 0.212 & 0.201 & 0.092 & 0.120 & 0.013 & \textbf{0.638} \\ \hline
+        9 & SANCITY 10LF           & 0.240 & 0.194 & 0.065 & 0.090 & 0.033 & \textbf{0.622} \\ \hline
+        10 & SANCITY 9LE           & 0.204 & 0.119 & 0.050 & 0.120 & 0.050 & \textbf{0.543} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Wyniki analizy wrażliwości -- autobusy średnie (scenariusz neutralny)}
+    \vspace{0.2cm}
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabular}{|c|l|c|c|c|c|c|c|}
+        \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Crossway Pro 10,8      & 0.200 & 0.200 & 0.146 & 0.120 & 0.133 & \textbf{0.799} \\ \hline
+        2 & Citaro K               & 0.166 & 0.136 & 0.192 & 0.200 & 0.092 & \textbf{0.787} \\ \hline
+        3 & Crossway 10.8LE        & 0.183 & 0.123 & 0.200 & 0.160 & 0.109 & \textbf{0.776} \\ \hline
+        4 & Urbino 8,9 LE          & 0.139 & 0.140 & 0.154 & 0.160 & 0.109 & \textbf{0.702} \\ \hline
+        5 & MAN Lion's City 10 E   & 0.181 & 0.153 & 0.115 & 0.160 & 0.046 & \textbf{0.656} \\ \hline
+        6 & SANCITY 9LE            & 0.117 & 0.068 & 0.100 & 0.160 & 0.200 & \textbf{0.645} \\ \hline
+        7 & SANCITY 10LF           & 0.137 & 0.111 & 0.131 & 0.120 & 0.133 & \textbf{0.632} \\ \hline
+        8 & Urbino 8,9 LE electric & 0.121 & 0.115 & 0.185 & 0.160 & 0.050 & \textbf{0.631} \\ \hline
+        9 & SANCITY 10LFE          & 0.189 & 0.102 & 0.115 & 0.160 & 0.055 & \textbf{0.621} \\ \hline
+        10 & Urbino 10,5 electric  & 0.189 & 0.140 & 0.092 & 0.120 & 0.046 & \textbf{0.588} \\ \hline
+    \end{tabular}
+    \end{adjustbox}
+\end{table}
+
+W segmencie autobusów średnich \textit{Crossway Pro 10,8} marki Iveco Bus okazuje się rozwiązaniem wyjątkowo stabilnym -- zajmuje pierwsze miejsce we wszystkich trzech scenariuszach. W scenariuszu technicznym osiąga wynik 0,896, będący najwyższą wartością spośród wszystkich badanych konfiguracji, co wynika z połączenia największej mocy silnika (360~KM) i najwyższej liczby miejsc (47) w tej klasie. W \textbf{scenariuszu oszczędnym} przewaga jest minimalna: \textit{Crossway Pro 10,8} uzyskuje wynik 0,764, wyprzedzając jedynie o 0,001 punkt \textit{SANCITY 9LE} -- najtańszy pojazd w zestawieniu (0,60~mln~zł). Oznacza to, że przy silnym priorytecie kosztowym ranking jest wrażliwy na tę różnicę i wybór decydenta może być niejednoznaczny.
+
+\textit{Citaro K} marki Mercedes-Benz konsekwentnie plasuje się w czołowej trójce w scenariuszu technicznym (poz.~2) i neutralnym (poz.~2), potwierdzając swoją wszechstronność. \textit{SANCITY 9LE} zaś wyróżnia się wyłącznie w scenariuszu oszczędnym -- jego bardzo niska cena zakupu (0,60~mln~zł) pozwala mu wypłynąć na pozycję drugą, mimo słabszych parametrów technicznych. We wszystkich pozostałych konfiguracjach zajmuje ostatnie miejsce.
+
+Podsumowując analizę wrażliwości obu segmentów: rekomendacja \textit{Crossway Pro 10,8} dla autobusów średnich jest odporna na zmianę preferencji decydenta, natomiast w segmencie dużych autobusów wybór lidera jest bardziej wrażliwy na strukturę wag -- w zależności od scenariusza na pozycji pierwszej pojawia się \textit{Urbino 12}, \textit{Urbino 15 LE electric} lub \textit{CapaCity L}.
