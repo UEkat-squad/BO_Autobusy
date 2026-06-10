@@ -10,9 +10,9 @@ Wychodząc naprzeciw specyficznym potrzebom nowo projektowanego układu komunika
 \begin{itemize}
     \item \textbf{K1: Moc silnika [KM] (stymulanta, waga $0,26$)} -- podwyższona waga tego kryterium wynika bezpośrednio z topografii miasta Sławków. Nierówny teren i przewyższenia sprawiają, że odpowiednia moc napędowa jest absolutnie kluczowa do sprawnego pokonywania wzniesień i utrzymania płynności jazdy.
     \item \textbf{K2: Miejsca dla pasażerów (stymulanta, waga $0,26$)} -- wysoka waga ma na celu zminimalizowanie zjawiska przepełnienia i "ciśnienia się" pasażerów w godzinach szczytowych, co bezpośrednio przekłada się na chęć korzystania z transportu publicznego.
-    \item \textbf{K3: Prestiż i komfort [skala 1-10] (stymulanta, waga $0,26$)} -- subiektywna ocena uśredniona przez grono decydentów w sekcji \ref{sec:bus_prestige}. Uwzględnia wygląd zewnętrzny, estetykę wnętrza i ciekawe rozwiązania technologiczne. Priorytetyzacja tego aspektu wynika z chęci zapewnienia mieszkańcom jak najlepszych doświadczeń z podróży.
-    \item \textbf{K4: Udogodnienia dla niepełnosprawnych (stymulanta, waga $0,11$)} -- kryterium dyskretne zliczające łączną ilość zastosowanych w pojeździe ułatwień dla osób o ograniczonej mobilności (np. rampa, niska podłoga, przyklęk, miejsce na wózek, braille).
-    \item \textbf{K5: Koszt zakupu [mln PLN] (destymulanta, waga $0,11$)} -- szacunkowy koszt jednostkowy pojazdu.
+    \item \textbf{K3: Udogodnienia dla niepełnosprawnych (stymulanta, waga $0,11$)} -- kryterium dyskretne zliczające łączną ilość zastosowanych w pojeździe ułatwień dla osób o ograniczonej mobilności (np. rampa, niska podłoga, przyklęk, miejsce na wózek, braille).
+    \item \textbf{K4: Koszt zakupu [mln PLN] (destymulanta, waga $0,11$)} -- szacunkowy koszt jednostkowy pojazdu.
+    \item \textbf{K5: Prestiż i komfort [skala 1-10] (stymulanta, waga $0,26$)} -- subiektywna ocena uśredniona przez grono decydentów w sekcji \ref{sec:bus_prestige}. Uwzględnia wygląd zewnętrzny, estetykę wnętrza i ciekawe rozwiązania technologiczne. Priorytetyzacja tego aspektu wynika z chęci zapewnienia mieszkańcom jak najlepszych doświadczeń z podróży.
 \end{itemize}
 
 Aby zapewnić miarodajność, analizę rozdzielono na dwie niezależne kategorie rynkowe: autobusy duże (przegubowe i wielkopojemne) oraz autobusy średnie (pojazdy klasy MIDI).
@@ -32,12 +32,12 @@ Parametry wejściowe modelu zdefiniowano następująco:
 \subsubsection*{Krok normalizacji}
 Ponieważ poszczególne kryteria wyrażone są w różnych jednostkach (konie mechaniczne, sztuki, punkty, miliony złotych), konieczne jest ich sprowadzenie do ujednoliconej, bezwymiarowej postaci. Transformacja ta polega na wyznaczeniu znormalizowanych wartości $r_{ij}$.
 
-Dla kryteriów będących stymulantami (K1, K2, K3, K4), w których wyższa wartość jest pożądana, zastosowano formułę:
+Dla kryteriów będących stymulantami (K1, K2, K3, K5), w których wyższa wartość jest pożądana, zastosowano formułę:
 \begin{equation}
 r_{ij} = \frac{x_{ij}}{\max_i x_{ij}}
 \end{equation}
 
-Dla kryterium będącego destymulantą (K5), gdzie niższa wartość jest preferowana, zastosowano odwróconą formułę proporcjonalności:
+Dla kryterium będącego destymulantą (K4), gdzie niższa wartość jest preferowana, zastosowano odwróconą formułę proporcjonalności:
 \begin{equation}
 r_{ij} = \frac{\min_i x_{ij}}{x_{ij}}
 \end{equation}
@@ -215,20 +215,20 @@ Do tej kategorii zakwalifikowano pojazdy o wysokiej zdolności przewozowej, prze
     \begin{adjustbox}{max width=\textwidth}
     \begin{tabular}{|l|c|c|c|c|c|}
         \hline
-        \textbf{Model Autobusu} & \textbf{K1: Moc [KM]} & \textbf{K2: Miejsca} & \textbf{K3: Prestiż} & \textbf{K4: Udogod.} & \textbf{K5: Koszt [mln]} \\ 
-        & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MIN)} \\ \hline
-        Urbino 15 LE electric & 408 & 65 & 7.00 & 2 & 2.20 \\ \hline
-        Urbino 18 CNG & 320 & 55 & 10.00 & 3 & 2.40 \\ \hline
-        Urbino 18 & 310 & 54 & 6.33 & 3 & 1.80 \\ \hline
-        Urbino 12 & 256 & 16 & 8.67 & 3 & 1.00 \\ \hline
-        Urbino 12 CNG & 320 & 40 & 4.67 & 3 & 1.10 \\ \hline
-        MAN Lion's City 12 E & 326 & 44 & 6.33 & 4 & 2.60 \\ \hline
-        MAN Lion's Intercity LE 14 & 265 & 63 & 6.33 & 3 & 1.80 \\ \hline
-        MAN Lion's City 12 G & 280 & 37 & 3.00 & 4 & 2.00 \\ \hline
-        SANCITY 12LFH & 344 & 40 & 8.00 & 3 & 3.25 \\ \hline
-        SANCITY 12LF & 277 & 40 & 4.00 & 3 & 1.00 \\ \hline
-        CapaCity L & 360 & 44 & 8.67 & 4 & 2.00 \\ \hline
-        Nesobus 12 & 340 & 37 & 9.67 & 3 & 2.90 \\ \hline
+        \textbf{Model Autobusu} & \textbf{K1: Moc [KM]} & \textbf{K2: Miejsca} & \textbf{K3: Udogod.} & \textbf{K4: Koszt [mln]} & \textbf{K5: Prestiż} \\ 
+        & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MIN)} & \textbf{(MAX)} \\ \hline
+        Urbino 15 LE electric & 408 & 65 & 2 & 2.20 & 7.00 \\ \hline
+        Urbino 18 CNG & 320 & 55 & 3 & 2.40 & 10.00 \\ \hline
+        Urbino 18 & 310 & 54 & 3 & 1.80 & 6.33 \\ \hline
+        Urbino 12 & 256 & 16 & 3 & 1.00 & 8.67 \\ \hline
+        Urbino 12 CNG & 320 & 40 & 3 & 1.10 & 4.67 \\ \hline
+        MAN Lion's City 12 E & 326 & 44 & 4 & 2.60 & 6.33 \\ \hline
+        MAN Lion's Intercity LE 14 & 265 & 63 & 3 & 1.80 & 6.33 \\ \hline
+        MAN Lion's City 12 G & 280 & 37 & 4 & 2.00 & 3.00 \\ \hline
+        SANCITY 12LFH & 344 & 40 & 3 & 3.25 & 8.00 \\ \hline
+        SANCITY 12LF & 277 & 40 & 3 & 1.00 & 4.00 \\ \hline
+        CapaCity L & 360 & 44 & 4 & 2.00 & 8.67 \\ \hline
+        Nesobus 12 & 340 & 37 & 3 & 2.90 & 9.67 \\ \hline
     \end{tabular}
     \end{adjustbox}
 \end{table}
@@ -240,19 +240,19 @@ Do tej kategorii zakwalifikowano pojazdy o wysokiej zdolności przewozowej, prze
     \begin{adjustbox}{max width=\textwidth}
     \begin{tabular}{|c|l|c|c|c|c|c|c|}
         \hline
-        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1 norm.} & \textbf{K2 norm.} & \textbf{K3 norm.} & \textbf{K4 norm.} & \textbf{K5 norm.} & \textbf{Wynik SAW} \\ \hline
-        1 & Urbino 18 CNG & 0.78 & 0.85 & 1.00 & 0.75 & 0.42 & \textbf{0.812} \\ \hline
-        2 & Urbino 15 LE electric & 1.00 & 1.00 & 0.70 & 0.50 & 0.45 & \textbf{0.807} \\ \hline
-        3 & CapaCity L & 0.88 & 0.68 & 0.87 & 1.00 & 0.50 & \textbf{0.796} \\ \hline
-        4 & Nesobus 12 & 0.83 & 0.57 & 0.97 & 0.75 & 0.34 & \textbf{0.736} \\ \hline
-        5 & MAN Lion's Intercity LE 14 & 0.65 & 0.97 & 0.63 & 0.75 & 0.56 & \textbf{0.729} \\ \hline
-        6 & Urbino 18 & 0.76 & 0.83 & 0.63 & 0.75 & 0.56 & \textbf{0.722} \\ \hline
-        7 & SANCITY 12LFH & 0.84 & 0.62 & 0.80 & 0.75 & 0.31 & \textbf{0.704} \\ \hline
-        8 & MAN Lion's City 12 E & 0.80 & 0.68 & 0.63 & 1.00 & 0.38 & \textbf{0.701} \\ \hline
-        9 & Urbino 12 CNG & 0.78 & 0.62 & 0.47 & 0.75 & 0.91 & \textbf{0.668} \\ \hline
-        10 & Urbino 12 & 0.63 & 0.25 & 0.87 & 0.75 & 1.00 & \textbf{0.645} \\ \hline
-        11 & SANCITY 12LF & 0.68 & 0.62 & 0.40 & 0.75 & 1.00 & \textbf{0.633} \\ \hline
-        12 & MAN Lion's City 12 G & 0.69 & 0.57 & 0.30 & 1.00 & 0.50 & \textbf{0.569} \\ \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Urbino 18 CNG & 0.2039 & 0.2200 & 0.0825 & 0.0458 & 0.2600 & \textbf{0.812} \\ \hline
+        2 & Urbino 15 LE electric & 0.2600 & 0.2600 & 0.0550 & 0.0500 & 0.1820 & \textbf{0.807} \\ \hline
+        3 & CapaCity L & 0.2294 & 0.1760 & 0.1100 & 0.0550 & 0.2253 & \textbf{0.796} \\ \hline
+        4 & Nesobus 12 & 0.2167 & 0.1480 & 0.0825 & 0.0379 & 0.2513 & \textbf{0.736} \\ \hline
+        5 & MAN Lion's Intercity LE 14 & 0.1689 & 0.2520 & 0.0825 & 0.0611 & 0.1647 & \textbf{0.729} \\ \hline
+        6 & Urbino 18 & 0.1975 & 0.2160 & 0.0825 & 0.0611 & 0.1647 & \textbf{0.722} \\ \hline
+        7 & SANCITY 12LFH & 0.2192 & 0.1600 & 0.0825 & 0.0338 & 0.2080 & \textbf{0.704} \\ \hline
+        8 & MAN Lion's City 12 E & 0.2077 & 0.1760 & 0.1100 & 0.0423 & 0.1647 & \textbf{0.701} \\ \hline
+        9 & Urbino 12 CNG & 0.2039 & 0.1600 & 0.0825 & 0.1000 & 0.1213 & \textbf{0.668} \\ \hline
+        10 & Urbino 12 & 0.1631 & 0.0640 & 0.0825 & 0.1100 & 0.2253 & \textbf{0.645} \\ \hline
+        11 & SANCITY 12LF & 0.1765 & 0.1600 & 0.0825 & 0.1100 & 0.1040 & \textbf{0.633} \\ \hline
+        12 & MAN Lion's City 12 G & 0.1784 & 0.1480 & 0.1100 & 0.0550 & 0.0780 & \textbf{0.569} \\ \hline
     \end{tabular}
     \end{adjustbox}
 \end{table}
@@ -270,18 +270,18 @@ Zestawienie pojazdów o długości do kilkunastu metrów, które idealnie wpisuj
     \begin{adjustbox}{max width=\textwidth}
     \begin{tabular}{|l|c|c|c|c|c|}
         \hline
-        \textbf{Model Autobusu} & \textbf{K1: Moc [KM]} & \textbf{K2: Miejsca} & \textbf{K3: Prestiż} & \textbf{K4: Udogod.} & \textbf{K5: Koszt [mln]} \\ 
-        & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MIN)} \\ \hline
-        Urbino 10,5 electric & 340 & 33 & 4.00 & 3 & 2.60 \\ \hline
-        Urbino 8,9 LE electric & 218 & 27 & 8.00 & 4 & 2.40 \\ \hline
-        Urbino 8,9 LE & 250 & 33 & 6.67 & 4 & 1.10 \\ \hline
-        MAN Lion's City 10 E & 326 & 36 & 5.00 & 4 & 2.60 \\ \hline
-        SANCITY 9LE & 210 & 16 & 4.33 & 4 & 0.60 \\ \hline
-        SANCITY 10LFE & 340 & 24 & 5.00 & 4 & 2.20 \\ \hline
-        SANCITY 10LF & 247 & 26 & 5.67 & 3 & 0.90 \\ \hline
-        Citaro K & 299 & 32 & 8.33 & 5 & 1.30 \\ \hline
-        Crossway 10.8LE & 330 & 29 & 8.67 & 4 & 1.10 \\ \hline
-        Crossway Pro 10,8 & 360 & 47 & 6.33 & 3 & 0.90 \\ \hline
+        \textbf{Model Autobusu} & \textbf{K1: Moc [KM]} & \textbf{K2: Miejsca} & \textbf{K3: Udogod.} & \textbf{K4: Koszt [mln]} & \textbf{K5: Prestiż} \\ 
+        & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MAX)} & \textbf{(MIN)} & \textbf{(MAX)} \\ \hline
+        Urbino 10,5 electric & 340 & 33 & 3 & 2.60 & 4.00 \\ \hline
+        Urbino 8,9 LE electric & 218 & 27 & 4 & 2.40 & 8.00 \\ \hline
+        Urbino 8,9 LE & 250 & 33 & 4 & 1.10 & 6.67 \\ \hline
+        MAN Lion's City 10 E & 326 & 36 & 4 & 2.60 & 5.00 \\ \hline
+        SANCITY 9LE & 210 & 16 & 4 & 0.60 & 4.33 \\ \hline
+        SANCITY 10LFE & 340 & 24 & 4 & 2.20 & 5.00 \\ \hline
+        SANCITY 10LF & 247 & 26 & 3 & 0.90 & 5.67 \\ \hline
+        Citaro K & 299 & 32 & 5 & 1.30 & 8.33 \\ \hline
+        Crossway 10.8LE & 330 & 29 & 4 & 1.10 & 8.67 \\ \hline
+        Crossway Pro 10,8 & 360 & 47 & 3 & 0.90 & 6.33 \\ \hline
     \end{tabular}
     \end{adjustbox}
 \end{table}
@@ -293,17 +293,17 @@ Zestawienie pojazdów o długości do kilkunastu metrów, które idealnie wpisuj
     \begin{adjustbox}{max width=\textwidth}
     \begin{tabular}{|c|l|c|c|c|c|c|c|}
         \hline
-        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1 norm.} & \textbf{K2 norm.} & \textbf{K3 norm.} & \textbf{K4 norm.} & \textbf{K5 norm.} & \textbf{Wynik SAW} \\ \hline
-        1 & Crossway Pro 10,8 & 1.00 & 1.00 & 0.73 & 0.60 & 0.67 & \textbf{0.849} \\ \hline
-        2 & Crossway 10.8LE & 0.92 & 0.62 & 1.00 & 0.80 & 0.55 & \textbf{0.807} \\ \hline
-        3 & Citaro K & 0.83 & 0.68 & 0.96 & 1.00 & 0.46 & \textbf{0.804} \\ \hline
-        4 & Urbino 8,9 LE & 0.69 & 0.70 & 0.77 & 0.80 & 0.55 & \textbf{0.711} \\ \hline
-        5 & MAN Lion's City 10 E & 0.91 & 0.77 & 0.58 & 0.80 & 0.23 & \textbf{0.698} \\ \hline
-        6 & Urbino 8,9 LE electric & 0.61 & 0.57 & 0.92 & 0.80 & 0.25 & \textbf{0.662} \\ \hline
-        7 & SANCITY 10LFE & 0.94 & 0.51 & 0.58 & 0.80 & 0.27 & \textbf{0.646} \\ \hline
-        8 & Urbino 10,5 electric & 0.94 & 0.70 & 0.46 & 0.60 & 0.23 & \textbf{0.639} \\ \hline
-        9 & SANCITY 10LF & 0.69 & 0.55 & 0.65 & 0.60 & 0.67 & \textbf{0.632} \\ \hline
-        10 & SANCITY 9LE & 0.58 & 0.34 & 0.50 & 0.80 & 1.00 & \textbf{0.568} \\ \hline
+        \textbf{Poz.} & \textbf{Model Autobusu} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{Wynik SAW} \\ \hline
+        1 & Crossway Pro 10,8 & 0.2600 & 0.2600 & 0.0660 & 0.0733 & 0.1900 & \textbf{0.849} \\ \hline
+        2 & Crossway 10.8LE & 0.2383 & 0.1604 & 0.0880 & 0.0600 & 0.2600 & \textbf{0.807} \\ \hline
+        3 & Citaro K & 0.2159 & 0.1770 & 0.1100 & 0.0508 & 0.2500 & \textbf{0.804} \\ \hline
+        4 & Urbino 8,9 LE & 0.1806 & 0.1826 & 0.0880 & 0.0600 & 0.2000 & \textbf{0.711} \\ \hline
+        5 & MAN Lion's City 10 E & 0.2354 & 0.1991 & 0.0880 & 0.0254 & 0.1500 & \textbf{0.698} \\ \hline
+        6 & Urbino 8,9 LE electric & 0.1574 & 0.1494 & 0.0880 & 0.0275 & 0.2400 & \textbf{0.662} \\ \hline
+        7 & SANCITY 10LFE & 0.2456 & 0.1328 & 0.0880 & 0.0300 & 0.1500 & \textbf{0.646} \\ \hline
+        8 & Urbino 10,5 electric & 0.2456 & 0.1826 & 0.0660 & 0.0254 & 0.1200 & \textbf{0.639} \\ \hline
+        9 & SANCITY 10LF & 0.1784 & 0.1438 & 0.0660 & 0.0733 & 0.1700 & \textbf{0.632} \\ \hline
+        10 & SANCITY 9LE & 0.1517 & 0.0885 & 0.0880 & 0.1100 & 0.1300 & \textbf{0.568} \\ \hline
     \end{tabular}
     \end{adjustbox}
 \end{table}
