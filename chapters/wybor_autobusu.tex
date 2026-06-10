@@ -1,6 +1,6 @@
 % -*- TeX-master: "../main.tex" -*-
 \chapter{Wybór modelu autobusu}
-Zaprojektowanie sieci przystanków i rozkładów jazdy musi iść w parze z odpowiednim doborem taboru, który fizycznie obsłuży zaplanowane trasy. Wybór modelu autobusu jest złożonym problemem decyzyjnym, wymagającym uwzględnienia ograniczeń budżetowych, wymagań terenowych oraz oczekiwań pasażerów. Ponieważ żaden dostępny na rynku pojazd nie jest idealny pod każdym względem (np. pojazdy najtańsze nie zawsze oferują najwyższy prestiż lub odpowiednią moc), konieczne było zastosowanie narzędzi z zakresu badań operacyjnych.
+Zaprojektowanie sieci przystanków i rozkładów jazdy musi iść w parze z odpowiednim doborem środku transportu, który fizycznie obsłuży zaplanowane trasy. Wybór modelu autobusu jest złożonym problemem decyzyjnym, wymagającym uwzględnienia ograniczeń budżetowych, wymagań terenowych oraz oczekiwań pasażerów. Ponieważ żaden dostępny na rynku pojazd nie jest idealny pod każdym względem (np. pojazdy najtańsze nie zawsze oferują najwyższy prestiż lub odpowiednią moc), konieczne było zastosowanie narzędzi z zakresu badań operacyjnych.
 
 W niniejszym rozdziale przeprowadzono ocenę dostępnych na rynku autobusów z wykorzystaniem metody SAW (\textit{Simple Additive Weighting}). Pozwala ona na sprowadzenie różnorodnych parametrów technicznych i ekonomicznych do wspólnego mianownika, ułatwiając tym samym obiektywny wybór najlepszego rozwiązania dla Sławkowa.
 
@@ -8,7 +8,7 @@ W niniejszym rozdziale przeprowadzono ocenę dostępnych na rynku autobusów z w
 Wychodząc naprzeciw specyficznym potrzebom nowo projektowanego układu komunikacyjnego w Sławkowie, parametry modelu decyzyjnego dostosowano w sposób odzwierciedlający realne wyzwania topograficzne oraz politykę transportową miasta. W procesie zrezygnowano z równego podziału wag, silnie premiując cechy gwarantujące sprawność obsługi i zadowolenie podróżnych. Wyodrębniono następujące kryteria:
 
 \begin{itemize}
-    \item \textbf{K1: Moc silnika [KM] (stymulanta, waga $0,26$)} -- podwyższona waga tego kryterium wynika bezpośrednio z topografii miasta Sławków. Nierówny teren i przewyższenia sprawiają, że odpowiednia moc napędowa jest absolutnie kluczowa do sprawnego pokonywania wzniesień i utrzymania płynności rozkładu jazdy.
+    \item \textbf{K1: Moc silnika [KM] (stymulanta, waga $0,26$)} -- podwyższona waga tego kryterium wynika bezpośrednio z topografii miasta Sławków. Nierówny teren i przewyższenia sprawiają, że odpowiednia moc napędowa jest absolutnie kluczowa do sprawnego pokonywania wzniesień i utrzymania płynności jazdy.
     \item \textbf{K2: Miejsca dla pasażerów (stymulanta, waga $0,26$)} -- wysoka waga ma na celu zminimalizowanie zjawiska przepełnienia i "ciśnienia się" pasażerów w godzinach szczytowych, co bezpośrednio przekłada się na chęć korzystania z transportu publicznego.
     \item \textbf{K3: Prestiż i komfort [skala 1-10] (stymulanta, waga $0,26$)} -- subiektywna ocena uśredniona przez grono decydentów w sekcji \ref{sec:bus_prestige}. Uwzględnia wygląd zewnętrzny, estetykę wnętrza i ciekawe rozwiązania technologiczne. Priorytetyzacja tego aspektu wynika z chęci zapewnienia mieszkańcom jak najlepszych doświadczeń z podróży.
     \item \textbf{K4: Udogodnienia dla niepełnosprawnych (stymulanta, waga $0,11$)} -- kryterium dyskretne zliczające łączną ilość zastosowanych w pojeździe ułatwień dla osób o ograniczonej mobilności (np. rampa, niska podłoga, przyklęk, miejsce na wózek, braille).
@@ -19,7 +19,7 @@ Aby zapewnić miarodajność, analizę rozdzielono na dwie niezależne kategorie
 
 \section{Modelowanie problemu decyzyjnego}
 
-Z matematycznego punktu widzenia wybór optymalnego taboru autobusowego stanowi wielokryterialny problem decyzyjny (MCDM -- \textit{Multi-Criteria Decision Making}). W celu przeprowadzenia formalnej analizy za pomocą metody SAW, problem ujęto w postaci modelu optymalizacyjnego. 
+Z matematycznego punktu widzenia wybór optymalnego pojazdu autobusowego stanowi wielokryterialny problem decyzyjny (MCDM -- \textit{Multi-Criteria Decision Making}). W celu przeprowadzenia formalnej analizy za pomocą metody SAW, problem ujęto w postaci modelu optymalizacyjnego. 
 
 Niech zbiór dostępnych wariantów (modeli autobusów) będzie oznaczony jako zbiór $A=\{A_1,A_2,\dots,A_m\}$, gdzie indeks $i\in\{1,\dots,m\}$. Każdy wariant oceniany jest na podstawie zbioru pięciu kryteriów decyzyjnych, indeksowanych jako $j\in\{1,\dots,5\}$. 
 
@@ -99,7 +99,7 @@ Wysoka nota wynika przede wszystkim z doskonale zaprojektowanego wnętrza. Decyd
 \MyFigure[0.5\textwidth]{images/autobusy/CapaCityL/zewnatrz.png}{Zewnętrze autobusu CapaCity L}{fig:CapaCityLzewnatrz}
 
 \subsection{Citaro K}
-Wysoka nota przyznana temu pojazdowi wynika w dużej mierze z bardzo udanego designu nadwozia. Front autobusu odznacza się masywną, solidną sylwetką, która budzi poczucie trwałości i bezpieczeństwa. Linia boczna harmonijnie współgra z estetyczną kolorystyką powłoki lakierniczej (w wariancie poglądowym jest to elegancki, złoty odcień). Kolejnym kluczowym atutem jest przemyślana aranżacja wnętrza. Zespół decyzyjny docenił układ tylnych rzędów siedzeń, których oparcia posiadają lekkie pochylenie, gwarantując pasażerom wyższy poziom odprężenia i komfortu w trakcie podróży.
+Wysoka nota przyznana temu pojazdowi wynika w dużej mierze z bardzo udanego designu nadwozia. Front autobusu odznacza się masywną, solidną sylwetką, która budzi poczucie trwałości i bezpieczeństwa. Linia boczna harmonijnie współgra z estetyczną kolorystyką lakieru (w wariancie poglądowym jest to elegancki, złoty odcień). Kolejnym kluczowym atutem jest przemyślana aranżacja wnętrza. Zespół decyzyjny docenił układ tylnych rzędów siedzeń, których oparcia posiadają lekkie pochylenie, gwarantując pasażerom wyższy poziom odprężenia i komfortu w trakcie podróży.
 \MyFigure[0.5\textwidth]{images/autobusy/CitaroK/wnetrze.png}{Wnętrze autobusu Citaro K}{fig:CitaroKwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/CitaroK/zewnatrz.png}{Zewnętrze autobusu Citaro K}{fig:CitaroKzewnatrz}
 
@@ -114,7 +114,7 @@ Pojazd ten został oceniony na 6 punktów ze względu na swój surowy charakter.
 \MyFigure[0.5\textwidth]{images/autobusy/CrosswayPro10,8/zewnatrz.png}{Zewnętrze autobusu Crossway Pro 10,8}{fig:CrosswayPro108zewnatrz}
 
 \subsection{MAN Lion's City 10 E}
-Pojazd ten otrzymał niższą punktację głównie ze względu na dysonans między poprawnym designem nadwozia a dyskusyjnym projektem przestrzeni pasażerskiej. Decydenci zwrócili szczególną uwagę na zbyt wąskie siedziska i oparcia foteli, które nie gwarantują odpowiedniego komfortu i mogą powodować uciążliwy ścisk w ułożeniu dwurzędowym. Dodatkowym czynnikiem negatywnie rzutującym na estetykę wnętrza jest nietypowe wykończenie podłogi. Wzór przypominający tradycyjne, domowe panele podłogowe został oceniony jako rozwiązanie nienaturalne i zaburzające profesjonalny wizerunek transportu zbiorowego.
+Pojazd ten otrzymał niższą punktację głównie ze względu na brak harmonii między poprawnym designem nadwozia a dyskusyjnym projektem przestrzeni pasażerskiej. Decydenci zwrócili szczególną uwagę na zbyt wąskie siedziska i oparcia foteli, które nie gwarantują odpowiedniego komfortu i mogą powodować uciążliwy ścisk w ułożeniu dwurzędowym. Dodatkowym czynnikiem negatywnie rzutującym na estetykę wnętrza jest nietypowe wykończenie podłogi. Wzór przypominający tradycyjne, domowe panele podłogowe został oceniony jako rozwiązanie nienaturalne i zaburzające profesjonalny wizerunek transportu zbiorowego.
 \MyFigure[0.5\textwidth]{images/autobusy/MANLion'sCity10E/wnetrze.png}{Wnętrze autobusu MAN Lion's City 10 E}{fig:MANLionsCity10Ewnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/MANLion'sCity10E/zewnatrz.png}{Zewnętrze autobusu MAN Lion's City 10 E}{fig:MANLionsCity10Ezewnatrz}
 
@@ -170,12 +170,12 @@ Autobus ten uzyskał satysfakcjonującą notę w wysokości 7 punktów. Ocenie z
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LE/zewnatrz.png}{Zewnętrze autobusu Urbino 8,9 LE}{fig:Urbino89LEzewnatrz}
 
 \subsection{Urbino 8,9 LE electric}
-Model ten uzyskał notę w wysokości 8 punktów. Zespół decyzyjny docenił przede wszystkim wyraźnie smuklejszą i bardziej nowoczesną linię nadwozia, która nadaje pojazdowi lekki i dynamiczny charakter. Kluczowym atutem wnętrza okazało się znaczne podwyższenie w tylnej sekcji pasażerskiej. Takie rozwiązanie architektoniczne nie tylko poszerza pole widzenia podróżnych, ale również gwarantuje im wyższy standard przejazdu, potęgując ogólne poczucie prestiżu i ekskluzywności. Pewnym mankamentem, który nieznacznie obniżył notę za estetykę, był dobór materiałów wykończeniowych - zastosowana na podłodze tekstura imitująca domowe panele drewniane została uznana za element niezbyt harmonizujący z wysoce nowoczesnym duchem pojazdu.
+Model ten uzyskał notę w wysokości 8 punktów. Zespół decyzyjny docenił przede wszystkim wyraźnie smuklejszą i bardziej nowoczesną linię nadwozia, która nadaje pojazdowi lekki i dynamiczny charakter. Kluczowym atutem wnętrza okazało się znaczne podwyższenie w tylnej sekcji pasażerskiej. Takie rozwiązanie architektoniczne nie tylko poszerza pole widzenia podróżnych, ale również gwarantuje im wyższy standard przejazdu, potęgując ogólne poczucie prestiżu i ekskluzywności. Pewną wadą, która nieznacznie obniżyła notę za estetykę, okazał się dobór materiałów wykończeniowych - zastosowana na podłodze tekstura imitująca domowe panele drewniane została uznana za element niezbyt harmonizujący z wysoce nowoczesnym duchem pojazdu.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LEelectric/wnetrze.png}{Wnętrze autobusu Urbino 8,9 LE electric}{fig:Urbino89LEelectricwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino8,9LEelectric/zewnatrz.png}{Zewnętrze autobusu Urbino 8,9 LE electric}{fig:Urbino89LEelectriczewnatrz}
 
 \subsection{Urbino 10,5 electric}
-Model ten uzyskał od zespołu decyzyjnego bardzo niską notę w wysokości 4 punktów. O ile bryła zewnętrzna pojazdu jest poprawna estetycznie i nie budzi większych zastrzeżeń, o tyle aranżacja wnętrza spotkała się z surową krytyką. Zdecydowanie najsłabszym punktem projektu okazał się niezwykle niefortunny dobór materiałów wykończeniowych. Zastosowanie mocno rzucającej się w oczy wykładziny o strukturze domowych paneli drewnianych uznano za rażący błąd estetyczny, który drastycznie obniża profesjonalny wizerunek autobusu. Ponadto, monotonny design foteli oraz wysoce surowy charakter tylnej, podwyższonej strefy sprawiają, że wnętrze jest całkowicie pozbawione wyrazu. Zamiast budować pożądane poczucie ekskluzywności i prestiżu, amfiteatralny podest w tylnej sekcji prezentuje się nadmiernie pospolicie.
+Model ten uzyskał od zespołu decyzyjnego bardzo niską notę w wysokości 4 punktów. O ile bryła zewnętrzna pojazdu jest poprawna estetycznie i nie budzi większych zastrzeżeń, o tyle aranżacja wnętrza spotkała się z surową krytyką. Zdecydowanie najsłabszym punktem projektu okazał się niezwykle niefortunny dobór materiałów wykończeniowych. Zastosowanie mocno rzucającej się w oczy wykładziny o strukturze domowych paneli drewnianych uznano za rażący błąd estetyczny, który drastycznie obniża profesjonalny wizerunek autobusu. Ponadto, monotonny design foteli oraz wysoce surowy charakter tylnej, podwyższonej strefy sprawiają, że wnętrze jest całkowicie pozbawione wyrazu. Zamiast budować pożądane poczucie ekskluzywności i prestiżu, teatralny podest w tylnej sekcji prezentuje jedynie brak oryginalności.
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino10,5electric/wnetrze.png}{Wnętrze autobusu Urbino 10,5 electric}{fig:Urbino105electricwnetrze}
 \MyFigure[0.5\textwidth]{images/autobusy/Urbino10,5electric/zewnatrz.jpg}{Zewnętrze autobusu Urbino 10,5 electric}{fig:Urbino105electriczewnatrz}
 
