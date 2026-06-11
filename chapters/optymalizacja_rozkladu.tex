@@ -1,3 +1,4 @@
+% -*- TeX-master: "../main.tex" -*-
 \chapter{Optymalizacja rozkładu jazdy}
 Po wyborze optymalnych dla tego problemu środków transportu, należy przejść do głównego algorytmu rozwiązującego problem z wyznaczeniem rozkładu jazdy dla miasta Sławków. Algorytm jaki zastosowano do wyznaczenia opytmalnego rozkładu to \textbf{algorytm genetyczny}. Implementację tego algorytmu wykonano w środowisku \textbf{.NET} wraz z bindingiem do biblioteki \textbf{raylib}, która umożliwiła
 zespołowi projektowemu zaprezentować rozwiązany problem w formie graficznej.  
@@ -35,7 +36,7 @@ Dzięki temu zabiegowi otrzymywane jest następne pokolenie, które przechodzi p
 Proces mutacji wprowadza losowe zmiany w genotypie, umożliwiając eksplorację przestrzeni rozwiązań. Działania te obejmują trzy główne obszary:
 
 \begin{itemize}
-    \item \textbf{Struktura sieci:} Dynamiczne dodawanie, usuwanie lub zamiana linii w celu zbliżenia liczby tras do wartości \texttt{CEL\_LINII}.
+    \item \textbf{Dodawanie/usuwanie lini:} Dynamiczne dodawanie, usuwanie lub zamiana linii w celu zbliżenia liczby tras do wartości \texttt{CEL\_LINII}. W ten sposób decydent może zachęcić program do dobrania liczby linii bliskiej jego idelnej liczbie linii
     \item \textbf{Przebieg tras:} Modyfikacja listy przystanków (dodawanie/usuwanie) oraz optymalizacja kolejności przystanków wewnątrz linii za pomocą operacji \textit{swap}.
     \item \textbf{Rozkład jazdy:} Przesuwanie godzin odjazdu w czasie lub zmiana ich częstotliwości (dodawanie/usuwanie kursów) w ramach określonych limitów.
 \end{itemize}
@@ -46,9 +47,10 @@ Intensywność tych zmian jest sterowana przez parametry \texttt{mutacja} oraz \
 W celu uniknięcia przedwczesnej zbieżności algorytmu, wprowadzono mechanizmy monitorowania stagnacji populacji. Jeśli przez określoną liczbę pokoleń najlepszy osobnik nie ulega poprawie, algorytm aktywuje jedną z procedur naprawczych:
 
 \begin{itemize}
-    \item \textbf{Tryb elitarny:} Wyłączenie selekcji elitarnej przy jednoczesnym zwiększeniu liczebności populacji, co sprzyja szerokiej eksploracji przestrzeni rozwiązań.
-    \item \textbf{Tryb mutacji:} Znaczne podniesienie prawdopodobieństwa mutacji, wymuszające radykalne zmiany w strukturze genotypów.
-    \item \textbf{Hipermutacja:} W procesie krzyżowania zastosowano pętlę wielokrotnej mutacji, która pozwala na gwałtowne "wypchnięcie" osobnika z obszaru suboptymalnego.
+    \item \textbf{Tryb elitarny (Nie używany):} Wyłączenie selekcji elitarnej przy jednoczesnym zwiększeniu liczebności populacji, co sprzyja szerokiej eksploracji przestrzeni rozwiązań. Jednak wyłączenie elit doprowadza do ostrego spadku
+    \item \textbf{Tryb mutacji (rekomendowany):} Tryb próbuje wymusić znalesienie nowego osobnika po przez modyfikacje współczynnika mutacji, jest mniej efektywny niż elitarny ale bardziej stabilny.
+    \item \textbf{Tryb automatyczny:} Poprawiona wersja trybu elitarnego, najbadziej skomplikowany tryb w naszym programie, działa w 3 trybach w przypadku braku zmiany fitness'u przez ostatni 50 generacji zwiększa populacja 4 ktotnie, po dojściu do 90 zwiąksza populacje 8 krotnie a po dojściu do 100 generacji bez poprawy przechodzi w tryb desperacji i wyłącza tymczasowo elity. Jest to tryb nie stabilny ale ma potęcjał dostarcenia lepszych wybuków niż inne tryby.
+    \item \textbf{Nieskończona ilość mutacji:} Mutacje w naszej implementacji technicznie mogą trwać w nieskończoność ponieważ dzieją się w pętli, która po każdej muacji losuje liczbę od 0 do 1 i jeśli liczba jest większa od obecnego współczynnika mutacji przerywa mutowanie, pozwala na gwałtowne "wypchnięcie" osobnika z obszaru suboptymalnego.
 \end{itemize}
 
 Dzięki tym zabiegom algorytm utrzymuje zdolność do ciągłego poszukiwania globalnego optimum, zapobiegając utknięciu w lokalnych punktach krytycznych funkcji fitness.
@@ -62,23 +64,23 @@ Podsumowując, optymalizacja rozkładu za pomocą algorytmu genetycznego stanowi
 
 \subsection{Wizualizacja rekomendacji decyzyjnych}
 Poniżej zaprezentowano wizualizacje poszczególnych przebiegów linii wygenerowanych przez najlepszego osobnika (rekord) na przestrzeni ewolucji algorytmu.
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_0.png}{Linia 1}{fig:Linia 1}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_1.png}{Linia 2}{fig:Linia 2}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_2.png}{Linia 3}{fig:Linia 3}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_3.png}{Linia 4}{fig:Linia 4}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_4.png}{Linia 5}{fig:Linia 5}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_5.png}{Linia 6}{fig:Linia 6}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_6.png}{Linia 7}{fig:Linia 7}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_7.png}{Linia 8}{fig:Linia 8}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_8.png}{Linia 9}{fig:Linia 9}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_9.png}{Linia 10}{fig:Linia 10}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_10.png}{Linia 11}{fig:Linia 11}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_11.png}{Linia 12}{fig:Linia 12}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_12.png}{Linia 13}{fig:Linia 13}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_13.png}{Linia 14}{fig:Linia 14}
-\MyFigure[0.7\textwidth]{images/wizualizacja/linia_14.png}{Linia 15}{fig:Linia 15}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_0.png}{Linia 1}{fig:Linia 1}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_1.png}{Linia 2}{fig:Linia 2}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_2.png}{Linia 3}{fig:Linia 3}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_3.png}{Linia 4}{fig:Linia 4}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_4.png}{Linia 5}{fig:Linia 5}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_5.png}{Linia 6}{fig:Linia 6}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_6.png}{Linia 7}{fig:Linia 7}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_7.png}{Linia 8}{fig:Linia 8}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_8.png}{Linia 9}{fig:Linia 9}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_9.png}{Linia 10}{fig:Linia 10}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_10.png}{Linia 11}{fig:Linia 11}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_11.png}{Linia 12}{fig:Linia 12}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_12.png}{Linia 13}{fig:Linia 13}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_13.png}{Linia 14}{fig:Linia 14}
+\MyFigure[0.8\textwidth]{images/wizualizacja/linia_14.png}{Linia 15}{fig:Linia 15}
 
-\MyFigure[0.7\textwidth]{images/wizualizacja/test.png}{Wszystkie linie}{fig:Wszystkie linie}
+\MyFigure[1\textwidth]{images/wizualizacja/test.png}{Wszystkie linie}{fig:Wszystkie linie}
 
 \subsection{Symulacja}
 \MyFigure[0.7\textwidth]{images/wizualizacja/8000.png}{Godzina 8:00}{fig:symulacja - godzina 8}
