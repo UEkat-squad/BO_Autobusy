@@ -1,0 +1,91 @@
+\chapter{Optymalizacja rozkładu jazdy}
+Po wyborze optymalnych dla tego problemu środków transportu, należy przejść do głównego algorytmu rozwiązującego problem z wyznaczeniem rozkładu jazdy dla miasta Sławków. Algorytm jaki zastosowano do wyznaczenia opytmalnego rozkładu to \textbf{algorytm genetyczny}. Implementację tego algorytmu wykonano w środowisku \textbf{.NET} wraz z bindingiem do biblioteki \textbf{raylib}, która umożliwiła
+zespołowi projektowemu zaprezentować rozwiązany problem w formie graficznej.  
+
+\section{Algorytm genetyczny}
+Algorytm genetyczny jest metodą optymalizacji inspirowaną procesami ewolucji biologicznej, w której populacja rozwiązań kandydujących ewoluuje w kierunku coraz lepszego dopasowania do zadanych kryteriów. W kontekście projektowania sieci komunikacyjnej dla miasta Sławków, każdy osobnik (rozwiązanie) reprezentuje kompletny zestaw linii autobusowych wraz z ich rozkładami jazdy. Algorytm iteracyjnie przekształca populację przy użyciu operatorów genetycznych, takich jak krzyżowanie oraz mutacja, dążąc do minimalizacji kosztów operacyjnych i maksymalizacji jakości obsługi pasażerów w ramach zdefiniowanej funkcji celu.
+\subsection{Implementacja}
+
+\subsubsection{Wagi}
+Zaprojektowany model posiada następujące wagi:
+\begin{itemize}
+    \item \texttt{WAGA\_DLUGOSC\_TRASY}: Określa karę za zbyt długie lub nieefektywne trasy autobusowe.
+    \item \texttt{WAGA\_FLOTA}: Reguluje koszt utrzymania i wielkość floty pojazdów przypisanych do linii.
+    \item \texttt{KARA\_NIESPELNIONE}: Nakłada dotkliwą karę za niespełnienie wymogów funkcjonalnych projektu sieci.
+    \item \texttt{WAGA\_DUPLIKATY\_DROG}: Zniechęca algorytm do tworzenia linii przebiegających przez te same odcinki dróg.
+    \item \texttt{WAGA\_ZAWRACANIE}: Karze za nieoptymalne trasy wymuszające nawracanie pojazdów.
+    \item \texttt{WAGA\_LICZBA\_LINII}: Kontroluje całkowitą liczbę linii autobusowych w sieci.
+    \item \texttt{WAGA\_KOSZT}: Uwzględnia ekonomiczne aspekty eksploatacji całego systemu komunikacji.
+    \item \texttt{SZANSA\_SWAP}: Definiuje prawdopodobieństwo wykonania operacji zamiany elementów w genotypie.
+    \item \texttt{KARA\_NIEKRYCIE}: Nakłada wysoką karę za obszary, które nie zostały obsłużone przez żadną linię.
+    \item \texttt{KARA\_BRAK\_POLACZ}: Karze za brak wymaganych połączeń przesiadkowych między punktami.
+    \item \texttt{KARA\_SZKOLA\_CZAS}: Dotyczy niedostosowania rozkładu jazdy do godzin pracy placówek edukacyjnych.
+    \item \texttt{KARA\_PRACA\_CZAS}: Dotyczy niedostosowania rozkładu jazdy do godzin dojazdów pracowników.
+\end{itemize}
+\subsubsection{Funkcja Fitness}
+Funkcja przystosowania (\textit{fitness function}) określa jakość każdego osobnika w populacji poprzez sumowanie kar za naruszenia założeń modelu. Wartość ta jest mnożona przez -1, ponieważ algorytm dąży do minimalizacji kosztu (kary):
+\begin{lstlisting}
+return -(karaTrasa + karaFlota + karaObsluga + calkowityCzas * 0.01f + karaLiczbaLinii + karaKoszt + karaMaxDystans + karaNiepokryte + karaPolaczenia);
+\end{lstlisting}
+\subsubsection{Krok ewolucji}
+Program rozpoczyna sie od stworzenia wybranej ilości linii autobusowych w tym przypadku wynosi 15 tras. Wybierani są "rodzice", na których przeprowadzane jest krzyżowanie genotypów (w przypadku tej implementacji jest to wybór losowy). Następnie na każdym z osobników populacji przeprowadzana jest mutacja zmieniająca jego genotyp, po czym przy wykorzystaniu wspomnianej wcześniej funkcji \textbf{Fitness} wybierany jest najlepszy organizm ze wszystkich możliwych.
+Najlepsze genotypy są powielane, a reszta usuwana.
+Dzięki temu zabiegowi otrzymywane jest następne pokolenie, które przechodzi przez taką samą procedure jak każda ubiegła epoka.
+\subsubsection{Mutacja}
+Proces mutacji wprowadza losowe zmiany w genotypie, umożliwiając eksplorację przestrzeni rozwiązań. Działania te obejmują trzy główne obszary:
+
+\begin{itemize}
+    \item \textbf{Struktura sieci:} Dynamiczne dodawanie, usuwanie lub zamiana linii w celu zbliżenia liczby tras do wartości \texttt{CEL\_LINII}.
+    \item \textbf{Przebieg tras:} Modyfikacja listy przystanków (dodawanie/usuwanie) oraz optymalizacja kolejności przystanków wewnątrz linii za pomocą operacji \textit{swap}.
+    \item \textbf{Rozkład jazdy:} Przesuwanie godzin odjazdu w czasie lub zmiana ich częstotliwości (dodawanie/usuwanie kursów) w ramach określonych limitów.
+\end{itemize}
+
+Intensywność tych zmian jest sterowana przez parametry \texttt{mutacja} oraz \texttt{SZANSA\_SWAP}, co zapewnia równowagę między stabilnością a poszukiwaniem lepszych wariantów sieci komunikacyjnej.
+
+\subsubsection{Zabezpieczenie przed lokalnym ekstremum}
+W celu uniknięcia przedwczesnej zbieżności algorytmu, wprowadzono mechanizmy monitorowania stagnacji populacji. Jeśli przez określoną liczbę pokoleń najlepszy osobnik nie ulega poprawie, algorytm aktywuje jedną z procedur naprawczych:
+
+\begin{itemize}
+    \item \textbf{Tryb elitarny:} Wyłączenie selekcji elitarnej przy jednoczesnym zwiększeniu liczebności populacji, co sprzyja szerokiej eksploracji przestrzeni rozwiązań.
+    \item \textbf{Tryb mutacji:} Znaczne podniesienie prawdopodobieństwa mutacji, wymuszające radykalne zmiany w strukturze genotypów.
+    \item \textbf{Hipermutacja:} W procesie krzyżowania zastosowano pętlę wielokrotnej mutacji, która pozwala na gwałtowne "wypchnięcie" osobnika z obszaru suboptymalnego.
+\end{itemize}
+
+Dzięki tym zabiegom algorytm utrzymuje zdolność do ciągłego poszukiwania globalnego optimum, zapobiegając utknięciu w lokalnych punktach krytycznych funkcji fitness.
+
+\subsection{Wnioski post-optymalizacyjne}
+Wyciągając wnioski z przeprowadzonej optymalizacji, należy zwrócić szczególną uwagę na zjawisko zbytniego usztywnienia parametrów środowiska. Jeśli model otrzyma zbyt rygorystyczne ograniczenia (np. skrajnie wysokie kary za maksymalną długość trasy lub brak tolerancji dla duplikatów dróg), może mieć trudności ze zbieżnością do akceptowalnego wyniku, co w skrajnych przypadkach skutkuje niewyznaczeniem żadnej sensownej trasy, z powodu przeważających wartości ujemnych z funkcji oceny.
+
+Drugim kluczowym aspektem jest odpowiednie balansowanie wag przystanków. Algorytm dążąc do surowej minimalizacji kosztów operacyjnych, może wykazywać tendencję do "odcinania" przystanków o bardzo niskim popycie pasażerskim. Z matematycznego punktu widzenia jest to optymalne, jednak z punktu widzenia użyteczności publicznej prowadzi do wykluczenia komunikacyjnego peryferyjnych obszarów miasta. Z tego względu niezwykle istotne było odpowiednie dostrojenie kary za pominięcie węzłów (\texttt{KARA\_NIEKRYCIE}), aby wymusić na algorytmie włączanie ich w obieg linii komunikacyjnych, nawet kosztem nieznacznego wydłużenia czasu przejazdu.
+
+Podsumowując, optymalizacja rozkładu za pomocą algorytmu genetycznego stanowi ciągły kompromis (trade-off) pomiędzy kosztami ponoszonymi przez przewoźnika (wielkość floty, przejechane kilometry) a komfortem pasażerów (liczba przesiadek, czas podróży). Otrzymane z programu wyniki stanowią doskonałą bazę i rekomendację decyzyjną do wdrożenia docelowego rozkładu.
+
+\subsection{Wizualizacja rekomendacji decyzyjnych}
+Poniżej zaprezentowano wizualizacje poszczególnych przebiegów linii wygenerowanych przez najlepszego osobnika (rekord) na przestrzeni ewolucji algorytmu.
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_0.png}{Linia 1}{fig:Linia 1}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_1.png}{Linia 2}{fig:Linia 2}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_2.png}{Linia 3}{fig:Linia 3}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_3.png}{Linia 4}{fig:Linia 4}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_4.png}{Linia 5}{fig:Linia 5}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_5.png}{Linia 6}{fig:Linia 6}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_6.png}{Linia 7}{fig:Linia 7}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_7.png}{Linia 8}{fig:Linia 8}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_8.png}{Linia 9}{fig:Linia 9}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_9.png}{Linia 10}{fig:Linia 10}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_10.png}{Linia 11}{fig:Linia 11}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_11.png}{Linia 12}{fig:Linia 12}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_12.png}{Linia 13}{fig:Linia 13}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_13.png}{Linia 14}{fig:Linia 14}
+\MyFigure[0.7\textwidth]{images/wizualizacja/linia_14.png}{Linia 15}{fig:Linia 15}
+
+\MyFigure[0.7\textwidth]{images/wizualizacja/test.png}{Wszystkie linie}{fig:Wszystkie linie}
+
+\subsection{Symulacja}
+\MyFigure[0.7\textwidth]{images/wizualizacja/8000.png}{Godzina 8:00}{fig:symulacja - godzina 8}
+\MyFigure[0.7\textwidth]{images/wizualizacja/1400.png}{Godzina 14:00}{fig:symulacja - godzina 14}
+\MyFigure[0.7\textwidth]{images/wizualizacja/2000.png}{Godzina 20:00}{fig:symulacja - godzina 20}
+
+
+
+
+
