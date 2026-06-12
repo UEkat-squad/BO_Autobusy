@@ -1,0 +1,122 @@
+[
+  {
+    "strategia": "brak",
+    "przebiegi": [
+      {
+        "nr": 1,
+        "sredniFitness": -894177.2500,
+        "koncowyFitness": -839701.8125,
+        "polepszenieProcent": 61.92,
+        "czasSekundy": 312.79
+      },
+      {
+        "nr": 2,
+        "sredniFitness": -917201.5000,
+        "koncowyFitness": -890939.2500,
+        "polepszenieProcent": 62.27,
+        "czasSekundy": 377.66
+      },
+      {
+        "nr": 3,
+        "sredniFitness": -943279.6250,
+        "koncowyFitness": -918682.2500,
+        "polepszenieProcent": 58.80,
+        "czasSekundy": 351.82
+      },
+      {
+        "nr": 4,
+        "sredniFitness": -943749.1875,
+        "koncowyFitness": -907281.1875,
+        "polepszenieProcent": 66.14,
+        "czasSekundy": 301.79
+      },
+      {
+        "nr": 5,
+        "sredniFitness": -939983.1250,
+        "koncowyFitness": -882240.6875,
+        "polepszenieProcent": 71.75,
+        "czasSekundy": 357.24
+      }
+    ]
+  },
+  {
+    "strategia": "mutation",
+    "przebiegi": [
+      {
+        "nr": 1,
+        "sredniFitness": -990344.5000,
+        "koncowyFitness": -960675.2500,
+        "polepszenieProcent": 56.92,
+        "czasSekundy": 332.79
+      },
+      {
+        "nr": 2,
+        "sredniFitness": -1064612.0000,
+        "koncowyFitness": -969577.1875,
+        "polepszenieProcent": 52.08,
+        "czasSekundy": 331.32
+      },
+      {
+        "nr": 3,
+        "sredniFitness": -977300.5000,
+        "koncowyFitness": -921438.0625,
+        "polepszenieProcent": 61.71,
+        "czasSekundy": 284.86
+      },
+      {
+        "nr": 4,
+        "sredniFitness": -968432.2500,
+        "koncowyFitness": -872064.1250,
+        "polepszenieProcent": 69.89,
+        "czasSekundy": 338.88
+      },
+      {
+        "nr": 5,
+        "sredniFitness": -918441.0625,
+        "koncowyFitness": -865899.3750,
+        "polepszenieProcent": 62.66,
+        "czasSekundy": 365.83
+      }
+    ]
+  },
+  {
+    "strategia": "auto",
+    "przebiegi": [
+      {
+        "nr": 1,
+        "sredniFitness": -2520798.0000,
+        "koncowyFitness": -2894632.2500,
+        "polepszenieProcent": -39.17,
+        "czasSekundy": 366.61
+      },
+      {
+        "nr": 2,
+        "sredniFitness": -2533328.0000,
+        "koncowyFitness": -3495490.5000,
+        "polepszenieProcent": -45.48,
+        "czasSekundy": 365.81
+      },
+      {
+        "nr": 3,
+        "sredniFitness": -2515491.7500,
+        "koncowyFitness": -2443784.5000,
+        "polepszenieProcent": -27.77,
+        "czasSekundy": 413.15
+      },
+      {
+        "nr": 4,
+        "sredniFitness": -2512396.0000,
+        "koncowyFitness": -2153629.0000,
+        "polepszenieProcent": -95.76,
+        "czasSekundy": 413.91
+      },
+      {
+        "nr": 5,
+        "sredniFitness": -2521549.2500,
+        "koncowyFitness": -1928840.6250,
+        "polepszenieProcent": 34.30,
+        "czasSekundy": 397.64
+      }
+    ]
+  }
+]

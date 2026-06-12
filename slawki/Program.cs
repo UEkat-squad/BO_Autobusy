@@ -112,6 +112,7 @@ internal static class Program
         cmdHandlers.Add("mapa",miasto.mapa);
         cmdHandlers.Add("opt",miasto.opt);
         cmdHandlers.Add("sym",miasto.sym);
+        cmdHandlers.Add("bench", new Benchmark());
         sekcje.Add(miasto);
 
         handleCMD(["mapa","load","slawki.xml"]);

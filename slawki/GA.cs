@@ -167,12 +167,7 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
     private string aktywnaStrategia = "mutation";
     private int generacjeStagnacji = 0;
     private int strategiaKroki = 0;
-    private bool autoFazaMutacji = true;
-    private int autoLicznikFazy = 0;
-    private int oryginalnaElita;
     private int mnoznikPopulacji = 1;
-    private float oryginalnaMutacja;
-    private int oryginalnyRozmiarPopulacjiDlaElit = 0;
 
     private const float KOSZT_DUZY_JEDNORAZ = 2_400_000f;
     private const float KOSZT_SREDNI_JEDNORAZ = 900_000f;
@@ -209,8 +204,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
     private float KARA_PRZEKROCZENIE_CZASU_SZKOLA = 5000f;
     private float KARA_PRZEKROCZENIE_CZASU_PRACA = 5000f;
 
-
-
     private float[,] czasyMiedzyPrzystankami = null!;
     private List<(int roadIdx, bool forward)>[,] sciezkiMiedzyPrzystankami = null!;
     private int ostatniaWersjaMapy = -1;
@@ -239,8 +232,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
     public OptymalizatorRozkladu(Punkt pos, Punkt size, Mapa mapa) : base(pos, size)
     {
         this.mapa = mapa;
-        oryginalnaElita = ELITA;
-        oryginalnaMutacja = MUTACJA_SZANSA;
         AktualizujSieci();
     }
 
@@ -288,11 +279,8 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         historiaFitness.Clear();
         generacjeStagnacji = 0;
         strategiaKroki = 0;
-        autoFazaMutacji = true;
-        autoLicznikFazy = 0;
+        mnoznikPopulacji = 1;
         MUTACJA_SZANSA = MUTACJA_BAZOWA;
-        ELITA = oryginalnaElita;
-        oryginalnyRozmiarPopulacjiDlaElit = 0;
         var opcje = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
         var torba = new ConcurrentBag<Osobnik>();
         Parallel.For(0, ROZMIAR_POPULACJI, opcje, i =>
@@ -314,11 +302,8 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         historiaFitness.Clear();
         generacjeStagnacji = 0;
         strategiaKroki = 0;
-        autoFazaMutacji = true;
-        autoLicznikFazy = 0;
+        mnoznikPopulacji = 1;
         MUTACJA_SZANSA = MUTACJA_BAZOWA;
-        ELITA = oryginalnaElita;
-        oryginalnyRozmiarPopulacjiDlaElit = 0;
 
         var opcje = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
         var torba = new ConcurrentBag<Osobnik>();
@@ -348,51 +333,32 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
             {
                 generacjeStagnacji = 0;
                 strategiaKroki = 0;
-                autoFazaMutacji = true;
-                autoLicznikFazy = 0;
                 mnoznikPopulacji = 1;
                 MUTACJA_SZANSA = MUTACJA_BAZOWA;
-                ELITA = oryginalnaElita;
-                oryginalnyRozmiarPopulacjiDlaElit = 0;
-
             }
             else
             {
                 generacjeStagnacji++;
-                if (generacjeStagnacji >= 5 && strategiaKroki == 0)
+                if (generacjeStagnacji >= 5 && strategiaKroki == 0 && aktywnaStrategia != "auto")
                 {
                     ZastosujStrategie();
                 }
-                if (generacjeStagnacji >= 50 && aktywnaStrategia == "auto")
+                if (aktywnaStrategia == "auto")
                 {
-                    mnoznikPopulacji = 4;
-                }
-                if (generacjeStagnacji >= 90 && aktywnaStrategia == "auto")
-                {
-                    mnoznikPopulacji = 8;
-                    MUTACJA_SZANSA = MUTACJA_BAZOWA*1.5f;
-                }
-                if (generacjeStagnacji >= 100 && aktywnaStrategia == "auto")
-                {
-                    if (ELITA != 0)
-                        oryginalnaElita = ELITA;
-                    ELITA = 0;
+                    if (generacjeStagnacji >= 50) mnoznikPopulacji = 4;
+                    if (generacjeStagnacji >= 90)
+                    {
+                        mnoznikPopulacji = 8;
+                        MUTACJA_SZANSA = MUTACJA_BAZOWA * 1.5f;
+                    }
+                    if (generacjeStagnacji >= 100) ELITA = 0;
                 }
             }
 
             if (strategiaKroki > 0)
             {
                 strategiaKroki--;
-                if (strategiaKroki == 0)
-                {
-                    ELITA = oryginalnaElita;
-                    MUTACJA_SZANSA = MUTACJA_BAZOWA;
-                    if (oryginalnyRozmiarPopulacjiDlaElit != 0)
-                    {
-                        ROZMIAR_POPULACJI = oryginalnyRozmiarPopulacjiDlaElit;
-                        oryginalnyRozmiarPopulacjiDlaElit = 0;
-                    }
-                }
+                if (strategiaKroki == 0) MUTACJA_SZANSA = MUTACJA_BAZOWA;
             }
 
             najlepszy = nowy;
@@ -409,39 +375,9 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         switch (aktywnaStrategia)
         {
             case "brak": break;
-            case "elit":
-                oryginalnyRozmiarPopulacjiDlaElit = ROZMIAR_POPULACJI;
-                ROZMIAR_POPULACJI *= 4;
-                ELITA = 0;
-                strategiaKroki = 5;
-                break;
             case "mutation":
                 MUTACJA_SZANSA = 0.6f;
                 strategiaKroki = 5;
-                break;
-            case "auto":
-                if (autoFazaMutacji)
-                {
-                    MUTACJA_SZANSA = Math.Min(0.6f, MUTACJA_BAZOWA + autoLicznikFazy * 0.05f);
-                    strategiaKroki = 3;
-                    autoLicznikFazy++;
-                    if (autoLicznikFazy >= 10)
-                    {
-                        autoFazaMutacji = false;
-                        autoLicznikFazy = 0;
-                    }
-                }
-                else
-                {
-                    // ELITA = 0;
-                    strategiaKroki = 3;
-                    autoLicznikFazy++;
-                    if (autoLicznikFazy >= 5)
-                    {
-                        autoFazaMutacji = true;
-                        autoLicznikFazy = 0;
-                    }
-                }
                 break;
         }
     }
@@ -700,7 +636,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
             karaLiczbaLinii = WAGA_LICZBA_LINII * (CEL_LINII - os.Linie.Count);
         }
 
-
         float karaKoszt = (kosztJednoraz + kosztRoczny) * WAGA_KOSZT;
 
         OstatniKosztJednoraz = kosztJednoraz;
@@ -774,7 +709,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         return c;
     }
 
-
     private List<List<(int stop, float arr, float dep)>> GenerujKursy(Osobnik os)
     {
         var kursy = new List<List<(int, float, float)>>();
@@ -783,7 +717,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
             float czasT = CzasTrasy(lin.Przystanki);
             foreach (int t in lin.Odjazdy)
             {
-                // Przód
                 var stops = new List<(int, float, float)>();
                 float czas = t;
                 for (int i = 0; i < lin.Przystanki.Count; i++)
@@ -800,7 +733,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
                 }
                 kursy.Add(stops);
 
-                // Powrót ze stałym postojem 2 minuty
                 var revStops = new List<(int, float, float)>();
                 czas = t + czasT + 2;
                 var odwrocona = Enumerable.Reverse(lin.Przystanki).ToList();
@@ -821,7 +753,8 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         }
         return kursy;
     }
-    private void PrzeliczFitnessPopulacji()
+
+    public void PrzeliczFitnessPopulacji()
     {
         if (populacja.Count == 0) return;
 
@@ -843,7 +776,7 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         var posort = populacja.OrderByDescending(o => o.Fitness).ToList();
         for (int i = 0; i < ELITA; i++) nowa.Add(posort[i]);
 
-        int doWygenerowania = ROZMIAR_POPULACJI*mnoznikPopulacji - ELITA;
+        int doWygenerowania = ROZMIAR_POPULACJI * mnoznikPopulacji - ELITA;
         var opcje = new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount };
         float obecnaMutacja = MUTACJA_SZANSA;
         Parallel.For(0, doWygenerowania, opcje, i =>
@@ -855,12 +788,10 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
 
             Mutuj(pot, lokalnyRng, obecnaMutacja);
 
-
-            while (rng.NextDouble() < obecnaMutacja)
+            while (lokalnyRng.NextDouble() < obecnaMutacja)   // <-- poprawione
             {
                 Mutuj(pot, lokalnyRng, obecnaMutacja);
             }
-
 
             pot.Fitness = ObliczFitness(pot);
             nowa.Add(pot);
@@ -901,7 +832,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
 
     private void Mutuj(Osobnik os, Random rng, float mutacja)
     {
-        //nakierowujemy algorytm na cel przystanków
         float prob = 0.5f;
         if (os.Linie.Count > CEL_LINII)
         {
@@ -912,40 +842,37 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
             prob += ((float)os.Linie.Count / (float)CEL_LINII) / 2.0f;
         }
 
-        if (rng.NextDouble() < mutacja)//dodanie/usunięcie lini
+        if (rng.NextDouble() < mutacja)
         {
             if (os.Linie.Count < MAKS_LINII && rng.NextDouble() < prob)
                 os.Linie.Add(LosowaLinia(rng));
             else if (os.Linie.Count > 1)
                 os.Linie.RemoveAt(rng.Next(os.Linie.Count));
         }
-        if (rng.NextDouble() < SZANSA_SWAP)//podmianka lini
+        if (rng.NextDouble() < SZANSA_SWAP)
         {
             os.Linie.Add(LosowaLinia(rng));
             os.Linie.RemoveAt(rng.Next(os.Linie.Count));
         }
         foreach (var lin in os.Linie)
         {
-            if (rng.NextDouble() < mutacja)//dodanie/usinięcie przystanku
+            if (rng.NextDouble() < mutacja)
             {
-
                 if ((lin.Przystanki.Count > MIN_PRZYSTANKOW && rng.NextDouble() < mutacja) || DystansTrasy(lin.Przystanki) > MAKS_DYSTANS_KM * 0.8)
                     UsunPrzystanek(lin, rng);
                 else if (lin.Przystanki.Count < MAKS_PRZYSTANKOW)
                     DodajPrzystanek(lin, rng);
                 lin.Rozmiar = lin.Przystanki.Count > PROG_SREDNI ? RozmiarAutobusu.Duzy : RozmiarAutobusu.Sredni;
             }
-            if (rng.NextDouble() < mutacja)//przesunięcie odjazdu
+            if (rng.NextDouble() < mutacja)
             {
                 int n = rng.Next(lin.Odjazdy.Count);
                 lin.Odjazdy[n] += (rng.Next(200) - 100) + 1440;
-
                 lin.Odjazdy[n] = lin.Odjazdy[n] % 1440;
                 lin.Odjazdy.Sort();
             }
-            if (rng.NextDouble() < mutacja)//dodanie/usunięcie odjazdu
+            if (rng.NextDouble() < mutacja)
             {
-
                 if (lin.Odjazdy.Count > 1 && rng.NextDouble() < 0.5f)
                     lin.Odjazdy.RemoveAt(rng.Next(lin.Odjazdy.Count));
                 else if (lin.Odjazdy.Count < MAKS_ODJAZDOW)
@@ -954,7 +881,7 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
                     if (!lin.Odjazdy.Contains(n)) { lin.Odjazdy.Add(n); lin.Odjazdy.Sort(); }
                 }
             }
-            if (rng.NextDouble() < SZANSA_SWAP && lin.Przystanki.Count >= 4)//zamiana przystanków
+            if (rng.NextDouble() < SZANSA_SWAP && lin.Przystanki.Count >= 4)
             {
                 int i1 = rng.Next(1, lin.Przystanki.Count - 2), i2 = rng.Next(i1 + 1, lin.Przystanki.Count - 1);
                 int a = lin.Przystanki[i1 - 1], b = lin.Przystanki[i1], c = lin.Przystanki[i1 + 1];
@@ -963,7 +890,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
                     !float.IsInfinity(czasyMiedzyPrzystankami[d, b]) && !float.IsInfinity(czasyMiedzyPrzystankami[b, f]))
                 { int tmp = lin.Przystanki[i1]; lin.Przystanki[i1] = lin.Przystanki[i2]; lin.Przystanki[i2] = tmp; }
             }
-
         }
     }
 
@@ -1018,7 +944,6 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         if (najlepszaPozycja >= 0 && aktualnyDystans + najlepszyKoszt <= MAKS_DYSTANS_KM)
             lin.Przystanki.Insert(najlepszaPozycja, nowy);
     }
-
 
     public override void Draw()
     {
@@ -1123,8 +1048,8 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         int x = 10, y = 10, odstep = 18;
         Raylib.DrawText($"Generacja: {generacja}", x, y, 18, Color.White); y += odstep;
         Raylib.DrawText($"Symulacja: {(dziala ? "ON" : "OFF")}", x, y, 18, dziala ? Color.Lime : Color.Gray); y += odstep;
-        string elitaNote = aktywnaStrategia=="auto"?$"(Elita : {ELITA} Stag : {generacjeStagnacji})":"";
-        Raylib.DrawText($"Strategia: {aktywnaStrategia} {elitaNote}" , x, y, 16, Color.Gold); y += odstep;
+        string elitaNote = aktywnaStrategia == "auto" ? $"(Elita : {ELITA} Stag : {generacjeStagnacji})" : "";
+        Raylib.DrawText($"Strategia: {aktywnaStrategia} {elitaNote}", x, y, 16, Color.Gold); y += odstep;
         var os = GetAktywnyOsobnik();
         if (os == null) return;
 
@@ -1430,27 +1355,27 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
             Console.WriteLine("Brak zapisanego rekordu.");
         }
     }
-    public void Clear()
-{
-    dziala = false;
-    populacja.Clear();
-    najlepszy = null;
-    rekord = null;
-    generacja = 0;
-    historiaFitness.Clear();
-    rozklad = null;
-    ostatniaWersjaMapy = -1;
-    domyId.Clear(); centraId.Clear(); szkolyId.Clear(); pracaId.Clear();
-    popytSzkola = null!;
-    popytPraca = null!;
-}
 
+    public void Clear()
+    {
+        dziala = false;
+        populacja.Clear();
+        najlepszy = null;
+        rekord = null;
+        generacja = 0;
+        historiaFitness.Clear();
+        rozklad = null;
+        ostatniaWersjaMapy = -1;
+        domyId.Clear(); centraId.Clear(); szkolyId.Clear(); pracaId.Clear();
+        popytSzkola = null!;
+        popytPraca = null!;
+    }
 
     public void cmd(string[] args)
     {
         switch (args[0])
         {
-            case "clear":Clear();Console.WriteLine("Wyczyszczono");break;
+            case "clear": Clear(); Console.WriteLine("Wyczyszczono"); break;
             case "start": dziala = true; Console.WriteLine("Symulacja start"); break;
             case "stop": dziala = false; Console.WriteLine("Symulacja stop"); break;
             case "step": WykonajKrokEwolucji(true); break;
@@ -1520,9 +1445,9 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
                 break;
 
             case "strategy":
-                if (args.Length < 2) { Console.WriteLine("Uzycie: opt strategy <brak|elit|mutation|auto>"); break; }
+                if (args.Length < 2) { Console.WriteLine("Uzycie: opt strategy <brak|mutation|auto>"); break; }
                 var s = args[1].ToLower();
-                if (s == "brak" || s == "elit" || s == "mutation" || s == "auto")
+                if (s == "brak" || s == "mutation" || s == "auto")
                 {
                     aktywnaStrategia = s;
                     Console.WriteLine($"Strategia ustawiona na: {aktywnaStrategia}");
@@ -1556,10 +1481,10 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
         try
         {
             switch (nazwa.ToUpper())
-            {//dodaj CEL_PRZYSTANKOw
+            {
                 case "ROZMIAR_POPULACJI": if (int.TryParse(wartoscStr, out int v) && v > 0) ROZMIAR_POPULACJI = v; else throw new Exception("Dodatnia liczba calkowita"); break;
-                case "ELITA": if (int.TryParse(wartoscStr, out int e) && e >= 0) { ELITA = e; oryginalnaElita = e; } else throw new Exception("Niepoprawna wartosc"); break;
-                case "MUTACJA_BAZOWA": if (float.TryParse(wartoscStr, out float mb) && mb >= 0 && mb <= 1) { MUTACJA_BAZOWA = mb; MUTACJA_SZANSA = mb; oryginalnaMutacja = mb; } else throw new Exception("Wartosc [0,1]"); break;
+                case "ELITA": if (int.TryParse(wartoscStr, out int e) && e >= 0) ELITA = e; else throw new Exception("Niepoprawna wartosc"); break;
+                case "MUTACJA_BAZOWA": if (float.TryParse(wartoscStr, out float mb) && mb >= 0 && mb <= 1) { MUTACJA_BAZOWA = mb; MUTACJA_SZANSA = mb; } else throw new Exception("Wartosc [0,1]"); break;
                 case "MUTACJA_PRZYROST": if (float.TryParse(wartoscStr, out float mp) && mp >= 0) MUTACJA_PRZYROST = mp; else throw new Exception(">=0"); break;
                 case "MAKS_LINII": if (int.TryParse(wartoscStr, out int ml) && ml >= 1) MAKS_LINII = ml; else throw new Exception(">=1"); break;
                 case "MIN_PRZYSTANKOW": if (int.TryParse(wartoscStr, out int minp) && minp >= 2) MIN_PRZYSTANKOW = minp; else throw new Exception(">=2"); break;
@@ -1608,6 +1533,44 @@ internal class OptymalizatorRozkladu : Sekcja, ICmdHandler
     public Osobnik? GetAktywny() => GetAktywnyOsobnik();
     public float[,] GetCzasyMiedzyPrzystankami() => czasyMiedzyPrzystankami;
     public List<(int roadIdx, bool forward)>[,] GetSciezkiMiedzyPrzystankami() => sciezkiMiedzyPrzystankami;
+
+    // Dodane metody dla benchmarku
+    public void EksportPopulacje(string plik)
+    {
+        var ser = new XmlSerializer(typeof(List<Osobnik>));
+        using var w = new StreamWriter(plik);
+        ser.Serialize(w, populacja);
+    }
+
+    public void WczytajPopulacje(string plik)
+    {
+        var ser = new XmlSerializer(typeof(List<Osobnik>));
+        using var r = new StreamReader(plik);
+        populacja = (List<Osobnik>)ser.Deserialize(r)!;
+        PrzeliczFitnessPopulacji();
+        generacja = 0;
+        historiaFitness.Clear();
+        if (najlepszy != null) historiaFitness.Add(najlepszy.Fitness);
+    }
+
+    public void UstawAktywnaStrategie(string strategia) => aktywnaStrategia = strategia;
+
+    public void ResetujGeneracje()
+    {
+        generacja = 0;
+        historiaFitness.Clear();
+    }
+
+    public void ResetujParametryStrategii()
+    {
+        ELITA = 2;
+        mnoznikPopulacji = 1;
+        generacjeStagnacji = 0;
+        strategiaKroki = 0;
+        MUTACJA_SZANSA = MUTACJA_BAZOWA;
+    }
+
+    public float GetNajlepszyFitness() => najlepszy?.Fitness ?? float.MinValue;
 }
 
 [Serializable]
@@ -1702,18 +1665,17 @@ internal class SymulatorDnia : Ctx, ICmdHandler
                 Vector2 A = mapa.punkty[dr.a];
                 Vector2 B = mapa.punkty[dr.b];
 
-                // Początek i koniec odcinka
                 Vector2 segStart, segEnd;
 
                 if (step == 0)
-                    segStart = mapa.przystanki[skad].pos; // pierwszy krok - zaczynamy na przystanku
+                    segStart = mapa.przystanki[skad].pos;
                 else
-                    segStart = fwd ? A : B;                // kontynuacja - punkt węzłowy (zależny od kierunku)
+                    segStart = fwd ? A : B;
 
                 if (step == sciezka.Count - 1)
-                    segEnd = mapa.przystanki[dokad].pos;   // ostatni krok - kończymy na przystanku
+                    segEnd = mapa.przystanki[dokad].pos;
                 else
-                    segEnd = fwd ? B : A;                  // pośredni - drugi punkt drogi
+                    segEnd = fwd ? B : A;
 
                 float dist = Vector2.Distance(segStart, segEnd);
                 float czasSegmentu = dist * MIN_PER_UNIT;
@@ -1723,6 +1685,7 @@ internal class SymulatorDnia : Ctx, ICmdHandler
         }
         return segmenty;
     }
+
     public void Draw()
     {
         if (dziala) { float deltaSek = Raylib.GetFrameTime(); czasMinuty += deltaSek * predkoscMnoznik; if (czasMinuty >= 1440f) czasMinuty -= 1440f; }
@@ -1772,6 +1735,7 @@ internal class SymulatorDnia : Ctx, ICmdHandler
         string tekst = $"Czas: {godz:D2}:{min:D2}";
         Raylib.DrawText(tekst, pos.x + 10, pos.y + size.y - 30, 24, Color.White);
     }
+
     public void Clear()
     {
         dziala = false;
@@ -1783,7 +1747,7 @@ internal class SymulatorDnia : Ctx, ICmdHandler
     {
         switch (args[0])
         {
-            case "clear":Clear();Console.WriteLine("Wyczyszczono");break;
+            case "clear": Clear(); Console.WriteLine("Wyczyszczono"); break;
             case "start": dziala = true; break;
             case "stop": dziala = false; break;
             case "reset": czasMinuty = 0; dziala = false; BudujKursy(); break;
