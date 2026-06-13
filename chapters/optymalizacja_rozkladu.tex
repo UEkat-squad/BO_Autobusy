@@ -36,7 +36,7 @@ Dzięki temu zabiegowi otrzymywane jest następne pokolenie, które przechodzi p
 Proces mutacji wprowadza losowe zmiany w genotypie, umożliwiając eksplorację przestrzeni rozwiązań. Działania te obejmują trzy główne obszary:
 
 \begin{itemize}
-    \item \textbf{Dodawanie/usuwanie lini:} Dynamiczne dodawanie, usuwanie lub zamiana linii w celu zbliżenia liczby tras do wartości \texttt{CEL\_LINII}. W ten sposób decydent może zachęcić program do dobrania liczby linii bliskiej jego idelnej liczbie linii
+    \item \textbf{Dodawanie/usuwanie lini:} Dynamiczne dodawanie, usuwanie lub zamiana linii w celu zbliżenia liczby tras do wartości \texttt{CEL\_LINII}. W ten sposób decydent może zachęcić program do dobrania liczby linii bliskiej jego idealnej liczbie linii.
     \item \textbf{Przebieg tras:} Modyfikacja listy przystanków (dodawanie/usuwanie) oraz optymalizacja kolejności przystanków wewnątrz linii za pomocą operacji \textit{swap}.
     \item \textbf{Rozkład jazdy:} Przesuwanie godzin odjazdu w czasie lub zmiana ich częstotliwości (dodawanie/usuwanie kursów) w ramach określonych limitów.
 \end{itemize}
@@ -83,11 +83,47 @@ Poniżej zaprezentowano wizualizacje poszczególnych przebiegów linii wygenerow
 \MyFigure[1\textwidth]{images/wizualizacja/test.png}{Wszystkie linie}{fig:Wszystkie linie}
 
 \subsection{Symulacja}
-\MyFigure[0.7\textwidth]{images/wizualizacja/8000.png}{Godzina 8:00}{fig:symulacja - godzina 8}
-\MyFigure[0.7\textwidth]{images/wizualizacja/1400.png}{Godzina 14:00}{fig:symulacja - godzina 14}
-\MyFigure[0.7\textwidth]{images/wizualizacja/2000.png}{Godzina 20:00}{fig:symulacja - godzina 20}
+\MyFigure[0.8\textwidth]{images/wizualizacja/8000.png}{Godzina 8:00}{fig:symulacja - godzina 8}
+\MyFigure[0.8\textwidth]{images/wizualizacja/1400.png}{Godzina 14:00}{fig:symulacja - godzina 14}
+\MyFigure[0.8\textwidth]{images/wizualizacja/2000.png}{Godzina 20:00}{fig:symulacja - godzina 20}
 
+\subsection{Analiza wyników benchmarku algorytmu}
 
+W celu weryfikacji skuteczności zaimplementowanych mechanizmów zapobiegających utknięciu algorytmu w lokalnym ekstremum, przeprowadzono dedykowane testy wydajnościowe. Analizie poddano trzy strategie konfiguracyjne zdefiniowane w założeniach projektu:
+\begin{itemize}
+    \item \textbf{Brak} – wyłączone mechanizmy ucieczki (stanowiące bazę odniesienia),
+    \item \textbf{Mutation} – rekomendowany tryb oparty na wymuszonej modyfikacji współczynnika mutacji,
+    \item \textbf{Auto} – złożony tryb automatyczny (skalowanie wielkości populacji do x4 i x8 oraz wyłączanie elityzmu).
+\end{itemize}
 
+Dla zachowania wiarygodności statystycznej, każdą ze strategii uruchomiono 5-krotnie dla tego samego zbioru danych wejściowych, a ostateczne wyniki uśredniono.
+
+\subsubsection{Analiza wartości funkcji celu (Fitness)}
+\MyFigure[0.8\textwidth]{images/analiza/podsumowanie_srednie_fitness.png}{Porównanie średniej końcowej wartości funkcji fitness dla badanych strategii}{fig:benchmark_fitness}
+
+Jak wynika z zebranych logów z przebiegu optymalizacji, najwyższą jakość końcową osiągnęła w tym scenariuszu strategia \textbf{Brak}, notując średni fitness na poziomie ok. $-887~769$. Bardzo zbliżony, niemal identycznie użyteczny rezultat osiągnął tryb \textbf{Mutation} (średnia ok. $-917~930$). 
+
+Zdecydowanie najsłabiej w zestawieniu wypadł teoretycznie najbardziej zaawansowany tryb \textbf{Auto}, uzyskując średni wynik rzędu $-2~583~275$. Próby kończyły się na dalekich od optimum wynikach, a niekiedy nawet ujemnym wskaźnikiem poprawy względem populacji startowej. Zjawisko to w pełni potwierdza jego niestabilność. Zbyt agresywne rozszerzanie populacji w połączeniu z wejściem w „tryb desperacji” (tymczasowe wyłączenie elit) sprawiały, że algorytm permanentnie gubił dotychczas wypracowane, najlepsze osobniki i w wyznaczonym czasie działania nie był w stanie wyewoluować ich od nowa.
+
+\subsubsection*{Analiza czasu wykonania}
+Zastosowane mechanizmy ratunkowe wpływają bezpośrednio na złożoność obliczeniową i sumaryczny czas działania algorytmu.
+
+\MyFigure[0.8\textwidth]{images/analiza/sredni_czas_wykonania.png}{Średni czas wykonania algorytmu w zależności od wybranej strategii}{fig:benchmark_czas}
+
+Zgodnie z przewidywaniami analitycznymi, tryb \textbf{Auto} był rozwiązaniem najbardziej obciążającym dla zasobów obliczeniowych procesora – symulacja trwała średnio $391,4$ sekundy. Narzut ten był generowany przez konieczność krzyżowania i mutowania gigantycznej liczby osobników w momencie 8-krotnego rozszerzenia populacji. Najbardziej zoptymalizowana czasowo okazała się z kolei strategia \textbf{Mutation} (średnio $330,7$ s). Co ciekawe, działała ona odrobinę szybciej niż całkowity brak mechanizmów (średnio $340,2$ s). Wynika to z faktu, że ukierunkowana mutacja pomaga szybciej wypchnąć algorytm w stronę optymalnych obszarów poszukiwań, eliminując potrzebę długotrwałej ewaluacji wysoce nieefektywnych i skomplikowanych genotypów.
+
+\subsubsection{Wizualizacja przebiegu ewolucji}
+Dodatkowy wgląd w naturę działania poszczególnych wariantów dają wykresy przedstawiające dynamikę zmian najlepszego przystosowania na przestrzeni pokoleń.
+
+\MyFigure[0.8\textwidth]{images/analiza/strategia_brak.png}{Przebieg funkcji fitness – brak mechanizmu ucieczki}{fig:strategia_brak}
+\MyFigure[0.8\textwidth]{images/analiza/strategia_mutation.png}{Przebieg funkcji fitness – tryb mutacji}{fig:strategia_mutation}
+\MyFigure[0.8\textwidth]{images/analiza/strategia_auto.png}{Przebieg funkcji fitness – tryb automatyczny}{fig:strategia_auto}
+
+Strategie \textbf{Brak} oraz \textbf{Mutation} charakteryzują się wzorcową dynamiką optymalizacji. Początkowe generacje przynoszą drastyczną poprawę wyników (faza intensywnej eksploracji), po czym algorytm stabilizuje swoje działanie i skupia się na subtelnym dopracowywaniu detali rozkładu jazdy, powoli dążąc do punktu optymalnego (faza eksploatacji).
+
+Wyraźnym kontrastem jest wykres dla trybu \textbf{Auto} (rys. \ref{fig:strategia_auto}), charakteryzujący się ostrymi załamaniami i brakiem ciągłości. Te drastyczne uskoki to punkty aktywacji mechanizmów ratunkowych po przekroczeniu progu 100 bezowocnych generacji. Zamiast zresetować stagnację z korzyścią dla populacji, interwencje te wywoływały chaos powstrzymujący algorytm przed zbiegnięciem się do rzetelnego rozwiązania.
+
+\subsubsection{Podsumowanie optymalizacyjne}
+Wdrożenie trybu \textbf{Auto} uznano za niecelowe ze względu na zjawisko przesterowania (ang. \textit{over-engineering}). Optymalnym wyborem dla Sławkowa pozostaje strategia \textbf{Mutation}. Choć tryb \textbf{Brak} osiągał w testach minimalnie lepsze wartości końcowe, \textbf{Mutation} stanowi znacznie bezpieczniejszy kompromis – gwarantuje wysoką sprawność czasową oraz skuteczne zabezpieczenie algorytmu w przypadku wylosowania słabej populacji początkowej.
 
 
