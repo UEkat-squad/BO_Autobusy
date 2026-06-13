@@ -33,21 +33,6 @@
 \input{chapters/optymalizacja_rozkladu.tex}
 \input{chapters/zakonczenie.tex}
 
-% *************** Bibliografia ***************
-% wymagania - Praca musi zawierać co najmniej 25 pozycji literaturowych, w tym 4 pozycje obcojęzyczne. Przypisy muszą być zgodne ze stylem APA. jako {nazwisko, rok, strona}
-\newpage
-\chapter*{Literatura} % Rozdział bez numeru
-\addcontentsline{toc}{chapter}{Literatura} % Dodanie do spisu treści
-
-\section*{Bibliografia}
-\setcounter{mybibcounter}{0} 
-\printbibliography[heading=none, notkeyword=netografia] % Wyświetla źródła nieoznaczone jako netografia
-
-\section*{Netografia}
-\setcounter{mybibcounter}{0} 
-\printbibliography[heading=none, keyword=netografia] % Wyświetla źródła oznaczone jako netografia
-
-
 % *************** Spisy pomocnicze ***************
 \clearpage
 \phantomsection
@@ -58,11 +43,5 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{Spis tabel}
 \listoftables
-
-% Jeśli chcesz dodać spis kodów (próbek kodu) 
-\clearpage
-\phantomsection
-\addcontentsline{toc}{chapter}{Spis listingów}
-\lstlistoflistings
 
 \end{document}
